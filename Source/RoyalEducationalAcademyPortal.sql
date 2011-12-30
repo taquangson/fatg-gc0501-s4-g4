@@ -102,3 +102,40 @@ INSERT INTO CLASSINCOURSE(CLASS,COURSE) VALUES (1,1)
 GO
 SELECT * FROM CLASSINCOURSE
 GO
+--Creating Assiment information
+--Creating Assiment request table
+CREATE TABLE REQUESTASSIMENT(
+RAID int identity primary key,
+RANAME nvarchar(80),
+RAINFO ntext,
+RAFILENAME nvarchar(80),
+CID int references CLASS(CID)
+)
+-- Creating Assiment submit
+CREATE TABLE SUBMITASSIMENT(
+SAID int identity primary key,
+SAFILENAME nvarchar(80),
+MID int references MEMBER(MID),
+RAID int references REQUESTASSIMENT(RAID)
+)
+-- Creating Assiment Mark
+CREATE TABLE MARKASSIMENT(
+MAID int identity primary key,
+MAMARK float,
+MID int references MEMBER(MID),
+SAID int references SUBMITASSIMENT(SAID),
+RAID int references REQUESTASSIMENT(RAID)
+)
+--Creating Feedback and FAQs table
+GO
+CREATE TABLE FAQ(
+FID int identity primary key,
+FQUESTION ntext,
+FANSWER ntext
+)
+GO
+CREATE TABLE FEEDBACK(
+FBID int identity primary key,
+FBQUESTION ntext,
+MID int references MEMBER(MID)
+)
