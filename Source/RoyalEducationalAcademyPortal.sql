@@ -1,4 +1,5 @@
 CREATE DATABASE RoyalEducationalAcademyPortal
+-- DROP DATABASE RoyalEducationalAcademyPortal
 GO
 USE RoyalEducationalAcademyPortal
 GO
@@ -16,7 +17,7 @@ GO
 SELECT * FROM MEMBERPERMISSION
 GO
 -- CREATE TABLE Members - M*
-CREATE TABLE MEMBER(
+CREATE TABLE MEMBERS(
 MID int identity primary key,
 MUSERNAME nvarchar(32),
 MPASSWORD nvarchar(32),
@@ -29,10 +30,10 @@ MPERMISSION int references MEMBERPERMISSION(MPID)
 )
 GO
 -- INSERT MEMBER
-INSERT INTO MEMBER(MUSERNAME,MPASSWORD,MFULLNAME,MADRESS,MEMAIL,MBIRTHDATE,MAVARTA,MPERMISSION)
+INSERT INTO MEMBERS(MUSERNAME,MPASSWORD,MFULLNAME,MADRESS,MEMAIL,MBIRTHDATE,MAVARTA,MPERMISSION)
 VALUES (N'admin',N'21232f297a57a5a743894a0e4a801fc3',N'Phạm Huy Đức',N'Long Biên - Hà Nội - Việt Nam',N'ducphgc00103@fpt.edu.vn','08/09/1990',NULL,1)
 GO
-SELECT * FROM MEMBER
+SELECT * FROM MEMBERS
 GO
 -- Creating table about Bath, Sem, Course, Class ...
 CREATE TABLE CLASS(
@@ -49,10 +50,10 @@ GO
 CREATE TABLE CLASSMEMBER(
 CMID int identity primary key,
 CID int references CLASS(CID),
-MID int references MEMBER(MID)
+MID int references MEMBERS(MID)
 )
 GO
-INSERT INTO CLASSMEMBER(CID,MID) VALUES (1,7)
+INSERT INTO CLASSMEMBER(CID,MID) VALUES (1,1)
 GO
 SELECT * FROM CLASSMEMBER
 GO
@@ -115,14 +116,14 @@ CID int references CLASS(CID)
 CREATE TABLE SUBMITASSIMENT(
 SAID int identity primary key,
 SAFILENAME nvarchar(80),
-MID int references MEMBER(MID),
+MID int references MEMBERS(MID),
 RAID int references REQUESTASSIMENT(RAID)
 )
 -- Creating Assiment Mark
 CREATE TABLE MARKASSIMENT(
 MAID int identity primary key,
 MAMARK float,
-MID int references MEMBER(MID),
+MID int references MEMBERS(MID),
 SAID int references SUBMITASSIMENT(SAID),
 RAID int references REQUESTASSIMENT(RAID)
 )
@@ -137,5 +138,5 @@ GO
 CREATE TABLE FEEDBACK(
 FBID int identity primary key,
 FBQUESTION ntext,
-MID int references MEMBER(MID)
+MID int references MEMBERS(MID)
 )
