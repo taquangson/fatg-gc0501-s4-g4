@@ -1,10 +1,12 @@
 
 #top {
     position: relative;
-    background-color: #036fab;
     color: white;
     padding: 5px;
     margin: 0px 0px 10px 0px;
+    width: 940px;
+    margin: auto;
+    margin-bottom: 35px;
 }
 
 #bottom {
@@ -12,50 +14,57 @@
     background-color: #c2dfef;
     padding: 5px;
     margin: 10px 0px 0px 0px;
+    clear: both;
+    width: 920px;
+    margin: auto;
 }
 
-#left {
-    float: left;
-    background-color: #ece3a5;
-    padding: 5px;
-    width: 150px;
+#mainbody{
+    width: 930px;
+    margin: auto;
 }
 
 #right {
     float: right;
     background-color: #ece3a5;
     padding: 5px;
-    width: 150px;
+    width: 250px;
+    margin: 0px;
 }
 
-.center_content {
-    position: relative;
+
+#content {
     background-color: #dddddd;
     padding: 5px;
+    width: 660px;
+
 }
 
-.left_content {
-    background-color: #dddddd;
-    padding: 5px;
-    margin-left: 170px;
+#top{
+    clear: both;
 }
 
-.right_content {
-    background-color: #dddddd;
-    padding: 5px;
-    margin: 0px 170px 0px 170px;
+#varbar{
+    top: 175px;
+    margin: auto;
+    width: 918px;
+    height: 35px;
+    background: url('../images/But2Mid.png') repeat;
+    float: left;
 }
-
-#top a:link, #top a:visited {
-  color: white;
-  font-weight : bold;
-  text-decoration: none;
+#varbar a{
+    height: 15px;
+    padding: 10px;
+    float: left;
+    color: #000;
+    text-decoration: none;
 }
-
-#top a:link:hover, #top a:visited:hover  {
-  color: black;
-  font-weight : bold;
-  text-decoration : underline;
+#varbar a:link{
+    color: #000;
+    text-decoration: none;
 }
-
+#varbar a:hover{
+    background: url('../images/But2MidB.png') repeat;
+    cursor: pointer;
+}
 

@@ -49,7 +49,7 @@ public class Submitassiment implements Serializable {
     private Requestassiment raid;
     @JoinColumn(name = "MID", referencedColumnName = "MID")
     @ManyToOne
-    private Member1 mid;
+    private Members mid;
 
     public Submitassiment() {
     }
@@ -91,11 +91,11 @@ public class Submitassiment implements Serializable {
         this.raid = raid;
     }
 
-    public Member1 getMid() {
+    public Members getMid() {
         return mid;
     }
 
-    public void setMid(Member1 mid) {
+    public void setMid(Members mid) {
         this.mid = mid;
     }
 
