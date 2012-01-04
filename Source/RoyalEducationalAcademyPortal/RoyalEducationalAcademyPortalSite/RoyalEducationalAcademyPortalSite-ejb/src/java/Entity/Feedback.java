@@ -8,6 +8,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,8 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Feedback implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "FID")
     private Integer fid;
     @Size(max = 1073741823)
@@ -41,7 +42,7 @@ public class Feedback implements Serializable {
     private String fquestion;
     @JoinColumn(name = "MID", referencedColumnName = "MID")
     @ManyToOne
-    private Member1 mid;
+    private Members mid;
 
     public Feedback() {
     }
@@ -66,11 +67,11 @@ public class Feedback implements Serializable {
         this.fquestion = fquestion;
     }
 
-    public Member1 getMid() {
+    public Members getMid() {
         return mid;
     }
 
-    public void setMid(Member1 mid) {
+    public void setMid(Members mid) {
         this.mid = mid;
     }
 

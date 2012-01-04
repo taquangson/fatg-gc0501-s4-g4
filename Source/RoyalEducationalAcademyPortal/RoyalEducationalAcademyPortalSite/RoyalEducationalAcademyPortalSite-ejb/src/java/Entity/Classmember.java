@@ -8,6 +8,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,13 +32,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Classmember implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "CMID")
     private Integer cmid;
     @JoinColumn(name = "MID", referencedColumnName = "MID")
     @ManyToOne
-    private Member1 mid;
+    private Members mid;
     @JoinColumn(name = "CID", referencedColumnName = "CID")
     @ManyToOne
     private Class cid;
@@ -56,11 +57,11 @@ public class Classmember implements Serializable {
         this.cmid = cmid;
     }
 
-    public Member1 getMid() {
+    public Members getMid() {
         return mid;
     }
 
-    public void setMid(Member1 mid) {
+    public void setMid(Members mid) {
         this.mid = mid;
     }
 

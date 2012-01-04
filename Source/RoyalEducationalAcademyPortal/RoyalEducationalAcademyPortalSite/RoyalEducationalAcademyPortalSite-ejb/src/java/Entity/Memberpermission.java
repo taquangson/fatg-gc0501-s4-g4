@@ -31,6 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Memberpermission.findByMpid", query = "SELECT m FROM Memberpermission m WHERE m.mpid = :mpid"),
     @NamedQuery(name = "Memberpermission.findByMpname", query = "SELECT m FROM Memberpermission m WHERE m.mpname = :mpname")})
 public class Memberpermission implements Serializable {
+    @OneToMany(mappedBy = "mpermission")
+    private List<Members> membersList;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -41,7 +43,7 @@ public class Memberpermission implements Serializable {
     @Column(name = "MPNAME")
     private String mpname;
     @OneToMany(mappedBy = "mpermission")
-    private List<Member1> member1List;
+    private List<Members> member1List;
 
     public Memberpermission() {
     }
@@ -67,11 +69,11 @@ public class Memberpermission implements Serializable {
     }
 
     @XmlTransient
-    public List<Member1> getMember1List() {
+    public List<Members> getMember1List() {
         return member1List;
     }
 
-    public void setMember1List(List<Member1> member1List) {
+    public void setMember1List(List<Members> member1List) {
         this.member1List = member1List;
     }
 
@@ -98,6 +100,15 @@ public class Memberpermission implements Serializable {
     @Override
     public String toString() {
         return "Entity.Memberpermission[ mpid=" + mpid + " ]";
+    }
+
+    @XmlTransient
+    public List<Members> getMembersList() {
+        return membersList;
+    }
+
+    public void setMembersList(List<Members> membersList) {
+        this.membersList = membersList;
     }
     
 }

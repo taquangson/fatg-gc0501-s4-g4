@@ -31,7 +31,11 @@ MPERMISSION int references MEMBERPERMISSION(MPID)
 GO
 -- INSERT MEMBER
 INSERT INTO MEMBERS(MUSERNAME,MPASSWORD,MFULLNAME,MADRESS,MEMAIL,MBIRTHDATE,MAVARTA,MPERMISSION)
-VALUES (N'admin',N'21232f297a57a5a743894a0e4a801fc3',N'Phạm Huy Đức',N'Long Biên - Hà Nội - Việt Nam',N'ducphgc00103@fpt.edu.vn','08/09/1990',NULL,1)
+VALUES (N'admin',N'21232f297a57a5a743894a0e4a801fc3',N'Phạm Huy Đức',N'Long Biên - Hà Nội - Việt Nam',N'ducphgc00103@fpt.edu.vn','09/08/1990',NULL,1)
+INSERT INTO MEMBERS(MUSERNAME,MPASSWORD,MFULLNAME,MADRESS,MEMAIL,MBIRTHDATE,MAVARTA,MPERMISSION)
+VALUES (N'hungpmgc00001',N'e10adc3949ba59abbe56e057f20f883e',N'Phạm Minh Hùng',N'Cầu Giấy - Hà Nội - Việt Nam',N'hungpmgc00001@fpt.edu.vn','06/30/1990',NULL,3)
+INSERT INTO MEMBERS(MUSERNAME,MPASSWORD,MFULLNAME,MADRESS,MEMAIL,MBIRTHDATE,MAVARTA,MPERMISSION)
+VALUES (N'binhdq',N'e10adc3949ba59abbe56e057f20f883e',N'Đỗ Quốc Bình',N'Đống Đa - Hà Nội - Việt Nam',N'binhdq@fpt.edu.vn','01/01/1970',NULL,2)
 GO
 SELECT * FROM MEMBERS
 GO
@@ -134,6 +138,8 @@ FID int identity primary key,
 FQUESTION ntext,
 FANSWER ntext
 )
+GO
+INSERT INTO FAQ(FQUESTION,FANSWER) VALUES (N'How to login?',N'Go to Homepage. Click to Login button. Type your username and password and Click Login.')
 GO
 CREATE TABLE FEEDBACK(
 FBID int identity primary key,

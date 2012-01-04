@@ -9,34 +9,65 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
         <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
-        <title>Facelets Template</title>
+        <title>Template</title>
     </h:head>
 
     <h:body>
-
-        <div id="top">
-        </div>
-        <div>
-            <div id="left">
+        <div id="wrappper">
+            <div style="padding-top: 175px;">
+            <div id="top">
+                <img src="resources/images/But2Left.png" style="float: left"/>
+                <div id="varbar">
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/">Home</a>
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/Login.xhtml">Login</a>
+                    <a href="">Your Assiment</a>
+                    <a href="">eLearning</a>
+                    <a href="">Feedback</a>
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml">FAQs</a>
+                </div>
+                <img src="resources/images/But2Right.png" style="float: right"/>
             </div>
+            </div>
+        <div id="mainbody">
             <div>
                 <div id="right">
                     <h:form>
+                    <p:panel header="Login panel">
+                        <table>
+                            <tr>
+                                <td>Username:</td>
+                                <td><p:inputText style="width: 130px" value="#{MemberController.username}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Password:</td>
+                                <td><p:password style="width: 130px" minLength="0" feedback="false" value="#{MemberController.password}" /></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <h:commandButton value="Login" action="#{MemberController.LOGIN(MemberController.username, MemberController.password)}"/>
+                                    <button type="reset">Clear</button>
+                                </td>
+                            </tr>
+                            </table>
+                        </p:panel>
+                    </h:form>
+                    <h:form>
                         <p:panel header="Class List">
-                            <p:dataGrid value="#{ShowClassController.SHOWALL()}" var="Class">
-                                    <h:outputLabel value="#{Class.cname}"/><br/>
-                            </p:dataGrid>
+                            <p:dataTable value="#{ShowClassController.SHOWALL()}" var="Class">
+                                <p:column>#{Class.cname}</p:column>
+                            </p:dataTable>
                         </p:panel>
                     </h:form>
                 </div>
-                <div id="content" class="right_content">
+                <div id="content">
                     <ui:insert name="content">Content</ui:insert>
                 </div>
             </div>
         </div>
         <div id="bottom">
         </div>
-
+        </div>
+        <center><img src="resources/images/back2bottom.png" style="margin: auto"/></center>
     </h:body>
-
 </html>

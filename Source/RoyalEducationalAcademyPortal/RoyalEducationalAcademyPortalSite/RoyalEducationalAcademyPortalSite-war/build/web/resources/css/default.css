@@ -1,11 +1,16 @@
 body {
-    background-color: #ffffff;
+    background-color: #fff;
     font-size: 12px;
     font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
-    color: #000000;  
-    margin: 10px;
+    color: #000000;
 }
-
+#wrappper{
+    background: url('../images/ermitagframe_full.png') top center no-repeat;
+    width: 960px;
+    height: 800px;
+    margin: auto;
+    top: 0px;
+}
 h1 {
     font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
     border-bottom: 1px solid #AFAFAF; 
@@ -14,16 +19,4 @@ h1 {
     margin: 0px;
     padding: 0px;
     color: #D20005;
-}
-
-a:link, a:visited {
-  color: #045491;
-  font-weight : bold;
-  text-decoration: none;
-}
-
-a:link:hover, a:visited:hover  {
-  color: #045491;
-  font-weight : bold;
-  text-decoration : underline;
 }
