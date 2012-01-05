@@ -68,6 +68,8 @@ BNAME nvarchar(80)
 )
 GO
 INSERT INTO BATH(BNAME) VALUES (N'GreenWich')
+INSERT INTO BATH(BNAME) VALUES (N'Aptech')
+INSERT INTO BATH(BNAME) VALUES (N'FU')
 GO
 SELECT * FROM BATH
 GO
@@ -80,6 +82,8 @@ BID int references BATH(BID)
 )
 GO
 INSERT INTO SEM(SNAME,BID) VALUES (N'Semester IV',1)
+INSERT INTO SEM(SNAME,BID) VALUES (N'ACCP i7',2)
+INSERT INTO SEM(SNAME,BID) VALUES (N'Computing',3)
 GO
 SELECT * FROM SEM
 GO
@@ -114,7 +118,8 @@ RAID int identity primary key,
 RANAME nvarchar(80),
 RAINFO ntext,
 RAFILENAME nvarchar(80),
-CID int references CLASS(CID)
+CID int references CLASS(CID),
+STUFFMID int references MEMBERS(MID)
 )
 -- Creating Assiment submit
 CREATE TABLE SUBMITASSIMENT(
