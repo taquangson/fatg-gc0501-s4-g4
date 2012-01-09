@@ -26,4 +26,12 @@ public class ShowClassController {
     public List<Entity.Class> SHOWALL(){
         return classFacade.findAll();
     }
+    public String[] SHOWNAMECLASS(){
+        List<Entity.Class> classrs = classFacade.findAll();
+        String[] rs = new String[classrs.size()];
+        for(int i = 0; i < classrs.size(); i++){
+            rs[i] = classrs.get(i).getCname();
+        }
+        return rs;
+    }
 }
