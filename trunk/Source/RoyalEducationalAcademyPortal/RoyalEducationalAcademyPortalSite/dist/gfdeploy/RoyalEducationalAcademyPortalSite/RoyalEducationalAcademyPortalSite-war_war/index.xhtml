@@ -32,11 +32,8 @@
             <div>
                 <div id="right">
                     <h:form>
-                    <p:panel header="Login panel">
-                        <c:if test="${MemberController.login} != 1">
-                            
-                        </c:if>
-                        <table>
+                    <p:panel header="Account panel">
+                        <table style="display: #{MemberController.GETLOGIN()}">
                             <tr>
                                 <td>Username:</td>
                                 <td><p:inputText style="width: 130px" value="#{MemberController.username}" /></td>
@@ -53,6 +50,24 @@
                                 </td>
                             </tr>
                             </table>
+                        <c:if test="#{MemberController.GETACCOUNT() != null}">
+                        <p:dataGrid value="#{MemberController.GETACCOUNT()}" var="account">
+                            <h:outputLabel value="#{MemberController.GETACCOUNT().mfullname}"/><br/>
+                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/EditMemberDetail.xhtml">Edit information</a> | 
+                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ChangePassword.xhtml">Change password</a> | 
+                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/Logout.xhtml">Logout</a>
+                        </p:dataGrid>
+                            
+                        <c:if test="#{MemberController.GETPERMISSION() == 1}">
+                            <p:panel header="Administrator">
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/AdminPanel.xhtml">Admin Control Panel</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newMember.xhtml">New Member</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ReportAssiment.xhtml">Assiment Report</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFAQs.xhtml">New FAQ</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewFeedback.xhtml">View Feedback</a><br/>
+                            </p:panel>
+                        </c:if>
+                        </c:if>
                         </p:panel>
                     </h:form>
                     <h:form>
