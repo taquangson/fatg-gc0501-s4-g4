@@ -56,7 +56,9 @@ public class MemberController {
         //member1Facade.ADD2("DucPH","123456","","","",null,new Date(), 1);
     }
     public void SETAVARTA(FileUploadEvent event){
-        MemberEntity.setMavarta(event.getFile().getContents());
+        //MemberEntity.setMavarta(event.getFile().getContents());
+        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");  
+        FacesContext.getCurrentInstance().addMessage(null, msg); 
     }
     public void CHANGEPASSWORD(){
         FacesMessage msg = new FacesMessage("Succesful", " Password is change.");  
