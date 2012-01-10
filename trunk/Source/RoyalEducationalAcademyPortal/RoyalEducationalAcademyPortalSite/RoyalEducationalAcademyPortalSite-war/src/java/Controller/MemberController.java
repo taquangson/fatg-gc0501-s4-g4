@@ -4,10 +4,13 @@
  */
 package Controller;
 
+import Entity.Memberpermission;
 import Entity.Members;
 import Session.MembersFacade;
 import com.sun.faces.facelets.tag.jsf.core.ConvertDateTimeHandler;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -36,12 +40,15 @@ public class MemberController {
     private int login = 0;
     private int newpermission;
     private Members MemberEntity;
+    private Members NewMemberEntity;
+    private UploadedFile file;
     /** Creates a new instance of MemberController */
     public int GETPERMISSION(){
         return GETACCOUNT().getMpermission().getMpid();
     }
     public MemberController() {
         MemberEntity = new Members();
+        NewMemberEntity = new Members();
     }
     public void DELETEMEMBER(String id){
         member1Facade.DELETE(Integer.parseInt(id));
@@ -49,16 +56,50 @@ public class MemberController {
     public List<Members> SHOWALL(){
         return member1Facade.findAll();
     }
-    public void ADDNEWMEMBER(){
-        member1Facade.ADDTEST();
-        //member1Facade.ADD(MemberEntity);
-        //member1Facade.ADD2(MemberEntity.getMusername(),MemberEntity.getMpassword(),MemberEntity.getMadress(),MemberEntity.getMfullname(),MemberEntity.getMemail(),MemberEntity.getMavarta(),MemberEntity.getMbirthdate(), getNewpermission());
-        //member1Facade.ADD2("DucPH","123456","","","",null,new Date(), 1);
+    public void SAVEUPLOADFILETOAVERTA(){
+        MemberEntity = GETACCOUNT();
+        InputStream inputStream = null;
+        try {
+            byte[] buffer = new byte[(int)getFile().getSize()];
+            inputStream = getFile().getInputstream();
+            inputStream.read(buffer);
+            MemberEntity.setMavarta(buffer);
+            FacesMessage msg = new FacesMessage("Succesful", getFile().getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (IOException ex) {
+            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        SAVEACCOUNT();
     }
-    public void SETAVARTA(FileUploadEvent event){
-        //MemberEntity.setMavarta(event.getFile().getContents());
-        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");  
-        FacesContext.getCurrentInstance().addMessage(null, msg); 
+    public void ADDNEWMEMBER(){
+        NewMemberEntity.setMpassword(new MD5().String2MD5(NewMemberEntity.getMpassword()));
+        NewMemberEntity.setMpermission(new Memberpermission(newpermission));
+        member1Facade.ADD(NewMemberEntity);
+    }
+    public void SETAVARTA(UploadedFile file){
+        InputStream inputStream = null;
+        try {
+            byte[] buffer = new byte[(int)file.getSize()];
+            inputStream = file.getInputstream();
+            inputStream.read(buffer);
+            //MemberEntity.setMavarta(buffer);
+            FacesMessage msg = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (IOException ex) {
+            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     public void CHANGEPASSWORD(){
         FacesMessage msg = new FacesMessage("Succesful", " Password is change.");  
@@ -152,6 +193,8 @@ public class MemberController {
 
     public void SAVEACCOUNT(){
         member1Facade.UPDATE(MemberEntity);
+        FacesMessage msg = new FacesMessage("Succesful", "Information is saved!");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
     }
     /**
      * @return the username
@@ -222,4 +265,33 @@ public class MemberController {
     public void setNewpermission(int newpermission) {
         this.newpermission = newpermission;
     }
+
+    /**
+     * @return the file
+     */
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
+
+    /**
+     * @return the NewMemberEntity
+     */
+    public Members getNewMemberEntity() {
+        return NewMemberEntity;
+    }
+
+    /**
+     * @param NewMemberEntity the NewMemberEntity to set
+     */
+    public void setNewMemberEntity(Members NewMemberEntity) {
+        this.NewMemberEntity = NewMemberEntity;
+    }
+
 }
