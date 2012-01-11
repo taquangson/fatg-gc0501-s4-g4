@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="Bath, Semester and Subject Manager" toggleable="true" toggleSpeed="500" collapsed="true">
+                    </p:panel>
+                    <p:panel header="Class manager" toggleable="true" toggleSpeed="500" collapsed="true">
+                        <p:dataTable value="#{ShowClassController.SHOWALL()}" var="Class">
+                            <p:column>
+                                #{Class.cid}
+                            </p:column>
+                            <p:column>
+                                #{Class.cname}
+                            </p:column>
+                            <p:column>
+                                <h:commandButton value="Delete"/>
+                                <h:commandButton value="Edit"/>
+                            </p:column>
+                        </p:dataTable>
+                        <a href="newClass.xhtml">New Class</a>
+                    </p:panel>
+                    <p:panel header="Members Manager" toggleable="true" toggleSpeed="500" collapsed="true">
+                        <p:dataTable value="#{MemberController.SHOWALL()}" var="Member">
+                            <p:column headerText="ID">
+                                #{Member.mid}
+                            </p:column>
+                            <p:column headerText="Username">
+                                #{Member.musername}
+                            </p:column>
+                            <p:column headerText="Fullname">
+                                #{Member.mfullname}
+                            </p:column>
+                            <p:column headerText="Permission">
+                                #{Member.mpermission.mpname}
+                            </p:column>
+                            <p:column>
+                                <h:commandButton action="#{MemberController.DELETEMEMBER(Member.mid)}" value="Delete"/>
+                                <h:commandButton value="Edit"/>
+                            </p:column>
+                        </p:dataTable>
+                        <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newMember.xhtml">New Member</a>
+                    </p:panel>
+                    <p:panel header="Assiment Report" toggleable="true" toggleSpeed="500" collapsed="true">
+                    </p:panel>
+                    <p:panel header="Feedback and FAQs Manager" toggleable="true" toggleSpeed="500" collapsed="true">
+                        <p:dataTable value="#{FAQsController.SHOWALL()}" var="FAQ">
+                            <p:column headerText="ID">
+                                #{FAQ.fid}
+                            </p:column>
+                            <p:column headerText="Question">
+                                #{FAQ.fquestion}
+                            </p:column>
+                            <p:column headerText="Answer">
+                                #{FAQ.fanswer}
+                            </p:column>
+                            <p:column>
+                                <h:commandButton action="#{FAQsController.DELETE(FAQ.fid)}" value="Delete"/>
+                                <h:commandButton value="Edit"/>
+                            </p:column>
+                        </p:dataTable>
+                        <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFAQs.xhtml">New FAQs</a>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

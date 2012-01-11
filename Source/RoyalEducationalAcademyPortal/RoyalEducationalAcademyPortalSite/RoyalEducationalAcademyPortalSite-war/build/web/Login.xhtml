@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="Login panel">
+                        <table style="width: 230px; margin: auto;">
+                            <tr>
+                                <td>Username:</td>
+                                <td><p:inputText value="#{MemberController.username}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Password:</td>
+                                <td><p:password minLength="0" feedback="false" value="#{MemberController.password}" /></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <h:commandButton value="Login" action="#{MemberController.LOGIN(MemberController.username, MemberController.password)}"/>
+                                    <button type="reset">Clear</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>    </td>
+                                <td>Wrong username or password!<br/>Try again!</td>
+                            </tr>
+                        </table>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
