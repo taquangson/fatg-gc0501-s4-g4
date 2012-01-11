@@ -11,8 +11,10 @@ import com.sun.faces.facelets.tag.jsf.core.ConvertDateTimeHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -46,6 +48,56 @@ public class MemberController {
     public int GETPERMISSION(){
         return GETACCOUNT().getMpermission().getMpid();
     }
+    public String removeNonDigits(String text) {
+     int length = text.length();
+     StringBuffer buffer = new StringBuffer(length);
+     for(int i = 0; i < length; i++) {
+         char ch = text.charAt(i);
+         if (Character.isDigit(ch)) {
+             buffer.append(ch);
+         }
+     }
+     return buffer.toString();
+ }
+
+    
+    public String GETNEWMEMBERID(){
+        int id = 0;
+        String sid = "";
+        List<Members> AMemberEntity = member1Facade.findAll();
+        for(int i = 0; i < AMemberEntity.size(); i++){
+            String musername = removeNonDigits(AMemberEntity.get(i).getMusername());
+            if(musername.length() >= 1){
+                if(Integer.parseInt(musername) > id){
+                    id = Integer.parseInt(musername);
+                }
+            }
+        }
+        int loop = 6 - ((id+"").length());
+        for(int y = 0; y < loop; y++){
+            sid = "0" + sid;
+        }
+        id++;
+        return (sid + id);
+    }
+    
+    public void GETAUTOROLLNUMBER(){
+        String rollnumber = "";// blank
+        String name = "";
+        String[] temp;//create a temp for rollnumber string
+        String delimiter = " ";//space delimiter
+        temp = NewMemberEntity.getMfullname().split(delimiter);
+        for(int i =0; i < temp.length ; i++){
+            if(i == (temp.length-1)){
+                name=temp[i].toString();
+            }else{
+                rollnumber+=temp[i].charAt(0);
+            }
+        }
+        rollnumber = name+rollnumber+GETNEWMEMBERID();
+        NewMemberEntity.setMusername(rollnumber);
+    }
+    
     public MemberController() {
         MemberEntity = new Members();
         NewMemberEntity = new Members();
@@ -78,9 +130,33 @@ public class MemberController {
         SAVEACCOUNT();
     }
     public void ADDNEWMEMBER(){
+        int error = 0;
+        if(NewMemberEntity.getMfullname().isEmpty()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fullname is empty", "Input fullname!")); 
+            error++;
+        }
+        if(NewMemberEntity.getMadress().isEmpty()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"No address", "Address can't empty!")); 
+            error++;
+        }
+        if(NewMemberEntity.getMbirthdate()==null){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Wrong birthdate", "Birthdate is wrong")); 
+            error++;
+        }
+        if(NewMemberEntity.getMemail().isEmpty()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Email is empty", "Input email!")); 
+            error++;
+        }
+        if(NewMemberEntity.getMpassword().isEmpty()){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Password is empty", "Input password")); 
+            error++;
+        }
         NewMemberEntity.setMpassword(new MD5().String2MD5(NewMemberEntity.getMpassword()));
         NewMemberEntity.setMpermission(new Memberpermission(newpermission));
-        member1Facade.ADD(NewMemberEntity);
+        if(error==0){
+            member1Facade.ADD(NewMemberEntity);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Member "+NewMemberEntity.getMusername()+" added!", "Successful!")); 
+        }
     }
     public void SETAVARTA(UploadedFile file){
         InputStream inputStream = null;
@@ -110,7 +186,12 @@ public class MemberController {
         int permission = 0;
         int userid = 0;
         // get all members
-        List<Members> lm = member1Facade.findAll();
+        List<Members> lm = new ArrayList<Members>();
+        try{
+            lm = member1Facade.findAll();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
         // md5 password
         password = new MD5().String2MD5(password);
         //valid each username and password, if true, set isValid
