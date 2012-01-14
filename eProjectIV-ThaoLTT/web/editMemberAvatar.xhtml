@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h1>Edit Member Avatar!</h1>
+        <h:form>
+            <p:fileUpload fileUploadListener="#{memberContoller.handleFileUpload}"
+                          update="messages,uploadedFile" sizeLimit="300000000" label="choose" allowTypes="*.jpg;*.png;*.gif;"
+                          description="Images"/>
+            <br/>
+            <br/>
+            <h:commandButton value="Sumit" action="#{memberContoller.editMemAva()}"></h:commandButton>
+            <br/>
+            <h:commandButton value="Cancel" action="#{memberContoller.cancelEdit()}"></h:commandButton>
+        </h:form>
+    </h:body>
+</html>
+

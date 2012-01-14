@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:panelGrid columns="2">
+        <h:outputLabel value="FullName: "/>
+        <h:outputLabel value="#{memberContoller.mem.mfullname}"/>
+
+        <h:outputLabel value="Address: "/>
+        <h:outputLabel value="#{memberContoller.mem.madress}"/>
+
+        <h:outputLabel value="Email: "/>
+        <h:outputLabel value="#{memberContoller.mem.memail}"/>
+
+        <c:if test="#{memberContoller.mem.mavarta != null}">            
+            <h:outputLabel value="Avatar: "/>
+            <p:graphicImage value="#{memberContoller.mem.mavarta}"/>
+        </c:if>
+
+        <h:outputLabel value="Birthdate: "/>
+        <h:outputLabel value="#{memberContoller.mem.mbirthdate}"/>
+        </h:panelGrid>
+        <br/>
+        <h:form>
+            <h:commandButton value="Change Information" action="#{memberContoller.redirectEditInformation()}"/>
+            <br/>
+            <h:commandButton value="Change Password" action="#{memberContoller.redirectEditPassword()}"/>
+            <br/>
+            <h:commandButton value="Change Avatar" action="#{memberContoller.redirectEditAvatar()}"/>
+        </h:form>
+    </h:body>
+</html>
+
