@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h1>Edit Member Information!</h1>
+        <h:form>
+            <table>
+              
+            <tr>
+                <td><a>Full Name:</a></td>
+                <td><h:inputText value="#{memberContoller.fullname}" id="name" required="true"
+                                 requiredMessage="Enter name" validatorMessage="Enter name"/></td>
+            </tr>
+            
+            <tr>
+                <td><a>Address:</a></td>
+                <td><h:inputText value="#{memberContoller.address}" id="address" required="true"
+                                 requiredMessage="Enter address" validatorMessage="Enter address"/></td>
+            </tr>
+            
+            <tr>
+                <td><a>Email</a></td>
+                <td><h:inputText id="email" value="#{memberContoller.email}" required="true"
+                                 requiredMessage="Invalid Email" validatorMessage="Invalid Email">                             
+                        <f:validateLength minimum="1" for="email"/>
+                    </h:inputText></td>
+            </tr>
+                   
+            <tr>
+                <td><a>Birthday:</a></td>
+                <td><p:calendar showOn="button" value="#{memberContoller.birthday}"/></td>
+            </tr>
+                
+            <tr>
+                <td><h:commandButton value="Sumit" action="#{memberContoller.editMemInfo()}"></h:commandButton></td>
+                <td><h:commandButton value="Cancel" action="#{memberContoller.cancelEdit()}"></h:commandButton></td>
+            </tr>
+            </table>
+            </h:form>
+    </h:body>
+</html>
+
