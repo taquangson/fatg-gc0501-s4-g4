@@ -64,7 +64,8 @@ CID int references CLASS(CID),
 MID int references MEMBERS(MID)
 )
 GO
-INSERT INTO CLASSMEMBER(CID,MID) VALUES (1,1)
+INSERT INTO CLASSMEMBER(CID,MID) VALUES (1,2)
+INSERT INTO CLASSMEMBER(CID,MID) VALUES (1,3)
 GO
 SELECT * FROM CLASSMEMBER
 GO
@@ -156,7 +157,10 @@ RAID int identity primary key,
 RANAME nvarchar(80),
 RAINFO ntext,
 RAFILENAME nvarchar(80),
+RADATE smalldatetime,
+RADEADLINE smalldatetime,
 CID int references CLASS(CID),
+CID2 int references COURSE(CID),
 STUFFMID int references MEMBERS(MID)
 )
 -- Creating Assiment submit
@@ -183,9 +187,10 @@ FANSWER ntext
 )
 GO
 INSERT INTO FAQ(FQUESTION,FANSWER) VALUES (N'How to login?',N'Go to Homepage. Click to Login button. Type your username and password and Click Login.')
-GO
+GO--DROP TABLE FEEDBACK
 CREATE TABLE FEEDBACK(
 FBID int identity primary key,
 FBQUESTION ntext,
+FBDATE smalldatetime,
 MID int references MEMBERS(MID)
 )
