@@ -35,6 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Course.findByCid", query = "SELECT c FROM Course c WHERE c.cid = :cid"),
     @NamedQuery(name = "Course.findByCname", query = "SELECT c FROM Course c WHERE c.cname = :cname")})
 public class Course implements Serializable {
+    @OneToMany(mappedBy = "cid2")
+    private List<Requestassiment> requestassimentList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -112,6 +114,15 @@ public class Course implements Serializable {
     @Override
     public String toString() {
         return "Entity.Course[ cid=" + cid + " ]";
+    }
+
+    @XmlTransient
+    public List<Requestassiment> getRequestassimentList() {
+        return requestassimentList;
+    }
+
+    public void setRequestassimentList(List<Requestassiment> requestassimentList) {
+        this.requestassimentList = requestassimentList;
     }
     
 }

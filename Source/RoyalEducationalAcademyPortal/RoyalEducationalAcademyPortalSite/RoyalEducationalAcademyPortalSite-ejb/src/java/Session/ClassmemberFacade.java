@@ -5,6 +5,7 @@
 package Session;
 
 import Entity.Classmember;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +19,7 @@ public class ClassmemberFacade extends AbstractFacade<Classmember> {
     @PersistenceContext(unitName = "RoyalEducationalAcademyPortalSite-ejbPU")
     private EntityManager em;
 
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
@@ -25,5 +27,7 @@ public class ClassmemberFacade extends AbstractFacade<Classmember> {
     public ClassmemberFacade() {
         super(Classmember.class);
     }
-    
+    public List<Classmember> SHOWALL(){
+        return em.createNamedQuery("Classmember.findAll").getResultList();
+    }
 }

@@ -6,6 +6,7 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,12 +18,14 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,6 +44,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Members.findByMemail", query = "SELECT m FROM Members m WHERE m.memail = :memail"),
     @NamedQuery(name = "Members.findByMbirthdate", query = "SELECT m FROM Members m WHERE m.mbirthdate = :mbirthdate")})
 public class Members implements Serializable {
+    @Column(name =     "MBIRTHDATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date mbirthdate;
+    @Lob
+    @Column(name = "MAVARTA")
+    private byte[] mavarta;
+    @OneToMany(mappedBy = "stuffmid")
+    private List<Requestassiment> requestassimentList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -61,12 +72,6 @@ public class Members implements Serializable {
     @Size(max = 80)
     @Column(name = "MEMAIL")
     private String memail;
-    @Column(name = "MBIRTHDATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date mbirthdate;
-    @Lob
-    @Column(name = "MAVARTA")
-    private byte[] mavarta;
     @JoinColumn(name = "MPERMISSION", referencedColumnName = "MPID")
     @ManyToOne
     private Memberpermission mpermission;
@@ -126,22 +131,6 @@ public class Members implements Serializable {
         this.memail = memail;
     }
 
-    public Date getMbirthdate() {
-        return mbirthdate;
-    }
-
-    public void setMbirthdate(Date mbirthdate) {
-        this.mbirthdate = mbirthdate;
-    }
-
-    public byte[] getMavarta() {
-        return mavarta;
-    }
-
-    public void setMavarta(byte[] mavarta) {
-        this.mavarta = mavarta;
-    }
-
     public Memberpermission getMpermission() {
         return mpermission;
     }
@@ -173,6 +162,31 @@ public class Members implements Serializable {
     @Override
     public String toString() {
         return "Entity.Members[ mid=" + mid + " ]";
+    }
+
+    @XmlTransient
+    public List<Requestassiment> getRequestassimentList() {
+        return requestassimentList;
+    }
+
+    public void setRequestassimentList(List<Requestassiment> requestassimentList) {
+        this.requestassimentList = requestassimentList;
+    }
+
+    public Date getMbirthdate() {
+        return mbirthdate;
+    }
+
+    public void setMbirthdate(Date mbirthdate) {
+        this.mbirthdate = mbirthdate;
+    }
+
+    public byte[] getMavarta() {
+        return mavarta;
+    }
+
+    public void setMavarta(byte[] mavarta) {
+        this.mavarta = mavarta;
     }
     
 }

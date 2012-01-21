@@ -6,7 +6,9 @@ package Session;
 
 import Entity.Memberpermission;
 import Entity.Members;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +29,11 @@ public class MembersFacade extends AbstractFacade<Members> {
 
     public MembersFacade() {
         super(Members.class);
+    }
+    public List<Members> GETSTUFFANDADMIN(){
+        List<Members> rs = new ArrayList<Members>();
+        rs = em.createQuery("SELECT m FROM Members m").getResultList();
+        return rs;
     }
     public void ADDTEST(){
         Members rs = new Members();

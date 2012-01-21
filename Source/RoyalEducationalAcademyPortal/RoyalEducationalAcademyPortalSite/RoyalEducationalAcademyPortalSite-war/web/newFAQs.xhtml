@@ -13,9 +13,9 @@
                 <h:form>
                     <p:panel header="New FAQs Panel">
                             <h:outputLabel value="Question"/>
-                            <p:inputTextarea value="#{FAQsController.newQuestion}"/>
+                            <p:editor  value="#{FAQsController.newQuestion}"/>
                             <h:outputLabel value="Answer"/>
-                            <p:inputTextarea value="#{FAQsController.newAnswer}"/>
+                            <p:editor  value="#{FAQsController.newAnswer}"/>
                             <h:commandButton value="Save" action="#{FAQsController.newFAQs()}"/>
                     </p:panel>
                 </h:form>

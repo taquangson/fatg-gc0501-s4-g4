@@ -5,6 +5,7 @@
 package Session;
 
 import Entity.Memberpermission;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +25,9 @@ public class MemberpermissionFacade extends AbstractFacade<Memberpermission> {
 
     public MemberpermissionFacade() {
         super(Memberpermission.class);
+    }
+    public List<Memberpermission> FINDBYMPID(int mpid){
+        return em.createNamedQuery("Memberpermission.findByMpid").setParameter("mpid", mpid).getResultList();
     }
     
 }
