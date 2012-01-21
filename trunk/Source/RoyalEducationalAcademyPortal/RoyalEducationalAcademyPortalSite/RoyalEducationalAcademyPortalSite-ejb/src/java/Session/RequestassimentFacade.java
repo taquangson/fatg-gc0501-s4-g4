@@ -25,5 +25,15 @@ public class RequestassimentFacade extends AbstractFacade<Requestassiment> {
     public RequestassimentFacade() {
         super(Requestassiment.class);
     }
+    public void ADD(Requestassiment newx){
+        try{
+            em.persist(newx);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    public void REMOVE(Requestassiment dmb){
+        em.remove(dmb);
+    }
     
 }

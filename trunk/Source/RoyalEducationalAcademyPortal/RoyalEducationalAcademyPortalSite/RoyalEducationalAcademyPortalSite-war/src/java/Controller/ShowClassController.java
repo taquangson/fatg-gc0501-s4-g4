@@ -4,34 +4,210 @@
  */
 package Controller;
 
+import Entity.Classincourse;
+import Entity.Classmember;
+import Entity.Course;
+import Entity.Memberpermission;
+import Entity.Members;
+import Entity.Requestassiment;
 import Session.ClassFacade;
+import Session.ClassmemberFacade;
+import Session.CourseFacade;
+import Session.MemberpermissionFacade;
+import Session.MembersFacade;
+import Session.RequestassimentFacade;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 /**
  *
  * @author SVN - Team
  */
-@ManagedBean(name="ShowClassController")
+@ManagedBean(name = "ShowClassController")
 @RequestScoped
 public class ShowClassController {
+
+    @EJB
+    private CourseFacade courseFacade;
+    @EJB
+    private RequestassimentFacade requestassimentFacade;
+    @EJB
+    private MemberpermissionFacade memberpermissionFacade;
+    @EJB
+    private MembersFacade membersFacade;
+    @EJB
+    private ClassmemberFacade classmemberFacade;
     @EJB
     private ClassFacade classFacade;
+    private List<Members> memberClass;
+    private int selectedCID;
+    private int selectedCID2;
+    private Requestassiment newra;
 
     /** Creates a new instance of ShowClassController */
     public ShowClassController() {
+        memberClass = new ArrayList<Members>();
+        newra = new Requestassiment();
+        selectedCID = 0;
+        selectedCID2 = 0;
     }
-    public List<Entity.Class> SHOWALL(){
+    
+    public void valueChangeMethod(ValueChangeEvent e){
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "xxx", "xxx"));
+    }
+
+    public List<Course> SHOWCOURSE(int cid) {
+        List<Course> rs = new ArrayList<Course>();
+        if (cid != 0) {
+            Entity.Class mclass = classFacade.find(cid);
+            List<Classincourse> cicl = mclass.getClassincourseList();
+            for (int y = 0; y < cicl.size(); y++) {
+                rs.add(cicl.get(y).getCourse());
+            }
+        }
+        return rs;
+    }
+
+    public List<Entity.Class> SHOWALL() {
         return classFacade.findAll();
     }
-    public String[] SHOWNAMECLASS(){
+
+    public void NEWRA(Requestassiment newrax, Members mem, int cid) {
+        int cid2 = selectedCID2;
+        int error = 0;
+        if (newrax.getRaname().equals("")) {
+            error++;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "Assiment name can't be empty"));
+        }
+        if (newrax.getRainfo().equals("")) {
+            error++;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "Assiment info can't be empty"));
+        }
+        if (newrax.getRadeadline() == null) {
+            error++;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "Assiment deadline can't be empty"));
+        }
+        if (cid == 0) {
+            error++;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "Select class first"));
+        }
+        if (cid2 == 0) {
+            error++;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "Please select course"));
+        }
+        if (error == 0) {
+            newrax.setRadate(new Date());
+            newrax.setRafilename("Demo.rar");
+            newrax.setCid(classFacade.find(cid));
+            newrax.setCid2(courseFacade.find(cid2));
+            newrax.setStuffmid(mem);
+            requestassimentFacade.ADD(newrax);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Assiment has been requested", "Name: " + newra.getRaname()));
+        }
+    }
+
+    public void SETUPMEMBERCLASS(int cid) {
+        List<Members> rs = new ArrayList<Members>();
+        if (cid != 0) {
+            Entity.Class mclass = classFacade.find(cid);
+            List<Classmember> mrs = classmemberFacade.findAll();
+            Memberpermission mpm = memberpermissionFacade.find(3);
+            for (int i = 0; i < mrs.size(); i++) {
+                if (mrs.get(i).getCid().equals(mclass) && mrs.get(i).getMid().getMpermission().equals(mpm)) {
+                    rs.add(mrs.get(i).getMid());
+                }
+            }
+        }
+        setMemberClass(rs);
+    }
+
+    public List<Entity.Class> SHOWALLBYMEMBER(Members mem) {
+        List<Entity.Class> rs = new ArrayList<Entity.Class>();
+        List<Classmember> clrs = classmemberFacade.findAll();
+        for (int i = 0; i < clrs.size(); i++) {
+            if (clrs.get(i).getMid().equals(mem)) {
+                rs.add(clrs.get(i).getCid());
+            }
+        }
+        return rs;
+    }
+
+    public String[] SHOWNAMECLASS() {
         List<Entity.Class> classrs = classFacade.findAll();
         String[] rs = new String[classrs.size()];
-        for(int i = 0; i < classrs.size(); i++){
+        for (int i = 0; i < classrs.size(); i++) {
             rs[i] = classrs.get(i).getCname();
         }
         return rs;
+    }
+
+    /**
+     * @return the memberClass
+     */
+    public List<Members> getMemberClass() {
+        return memberClass;
+    }
+
+    /**
+     * @param memberClass the memberClass to set
+     */
+    public void setMemberClass(List<Members> memberClass) {
+        this.memberClass = memberClass;
+    }
+
+    /**
+     * @return the selectedCID
+     */
+    public int getSelectedCID() {
+        return selectedCID;
+    }
+
+    /**
+     * @param selectedCID the selectedCID to set
+     */
+    public void setSelectedCID(int selectedCID) {
+        this.selectedCID = selectedCID;
+    }
+
+    /**
+     * @return the newra
+     */
+    public Requestassiment getNewra() {
+        return newra;
+    }
+
+    /**
+     * @param newra the newra to set
+     */
+    public void setNewra(Requestassiment newra) {
+        this.newra = newra;
+    }
+
+    /**
+     * @return the selectedCID2
+     */
+    public int getSelectedCID2() {
+        return selectedCID2;
+    }
+
+    /**
+     * @param selectedCID2 the selectedCID2 to set
+     */
+    public void setSelectedCID2(int selectedCID2) {
+        this.selectedCID2 = selectedCID2;
+    }
+
+    /**
+     * @param selectedCID2 the selectedCID2 to set
+     */
+    public void setSelectedCID2(String selectedCID2) {
+        this.selectedCID2 = Integer.parseInt(selectedCID2);
     }
 }

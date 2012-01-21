@@ -26,4 +26,12 @@ public class FeedbackFacade extends AbstractFacade<Feedback> {
         super(Feedback.class);
     }
     
+    public void ADDNEWFEEDBACK(Feedback fb){
+        em.persist(fb);
+    }
+    public void DELETE(int id){
+        Feedback rs = em.find(Feedback.class, id);
+        em.remove(rs);
+    }
+    
 }
