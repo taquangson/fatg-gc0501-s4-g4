@@ -12,8 +12,18 @@
 
             <ui:define name="content">
                 <h:form>
-                    <p:panel header="Bath > Course > Class">
-                        
+                    #{AssimentController.SETUPASSIMENTVIEW()}
+                    <p:panel header="Assiment for your class">
+                        <p:breadCrumb>
+                            <p:menuitem value="Home" url="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/"/>
+                            <p:menuitem value="#{AssimentController.GETSELECTEDCOURSE().sid.bid.bname}"/>
+                            <p:menuitem value="#{AssimentController.GETSELECTEDCOURSE().sid.sname}"/>
+                            <p:menuitem value="#{AssimentController.GETSELECTEDCOURSE().cname}"/>
+                            <p:menuitem value="#{AssimentController.GETSELECTEDCLASS().cname}"/>
+                        </p:breadCrumb><br/>
+                        <c:forEach var="ra" items="#{AssimentController.GETASSIMENTBYACCOUNT()}">
+                            #{ra.raname}
+                        </c:forEach>
                     </p:panel>
                 </h:form>
             </ui:define>

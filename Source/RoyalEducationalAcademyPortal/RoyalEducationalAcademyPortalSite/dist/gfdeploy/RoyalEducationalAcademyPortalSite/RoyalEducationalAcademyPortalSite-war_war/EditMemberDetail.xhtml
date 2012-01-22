@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+            
+            <ui:define name="content">
+                <h:form>
+                    <p:panel header="Update Account Information">
+                        <c:if test="#{MemberController.GETACCOUNT() != null}">
+                            Address: <p:inputText value="#{MemberController.memberEntity.madress}" /><br/>
+                                Email: <p:inputText value="#{MemberController.memberEntity.memail}" /><br/>
+                                <c:if test="#{MemberController.memberEntity.mavarta == null}">
+                                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/UpdateAvarta.xhtml">Upload avarta</a><br/>
+                                </c:if>
+                                Birthday: <p:calendar value="#{MemberController.memberEntity.mbirthdate}" /><br/>
+                                <h:commandButton value="Save" action="#{MemberController.SAVEACCOUNT()}"/>
+                                
+                        </c:if>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

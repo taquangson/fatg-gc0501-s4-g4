@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <p:panel header="New Assiment form">
+                    <h:form>
+                        <p:messages showDetail="true" />
+                        #{ShowClassController.HACKCLASSID()}
+                        <h:selectOneMenu id="courseid" value="#{ShowClassController.selectedCID2}">
+                            <f:selectItem itemLabel="Select course" itemValue="0"/>
+                            <f:selectItems value="#{ShowClassController.SHOWCOURSE()}" var="course" itemLabel="#{course.cname}" itemValue="#{course.cid}"/> 
+                        </h:selectOneMenu> <br/>
+                        
+                        <p:dataTable value="#{ShowClassController.memberClass}" var="members">
+                            <p:column headerText="Fullname">
+                                #{members.mfullname}
+                            </p:column>
+                            <p:column headerText="Rollnumber">
+                                #{members.musername}
+                            </p:column>
+                            <p:column headerText="Email">
+                                #{members.memail}
+                            </p:column>
+                            <p:column headerText="Birthdate">
+                                #{members.mbirthdate.day}/#{members.mbirthdate.month}/#{members.mbirthdate.year}
+                            </p:column>
+                        </p:dataTable><br/>
+                            Assiment name: <br/>
+                            <p:inputText value="#{ShowClassController.newra.raname}"/><br/>
+                            Assiment info:<br/>
+                            <p:editor value="#{ShowClassController.newra.rainfo}" />
+                            Assiment file: <p:fileUpload/><br/>
+                            Deadline: <p:calendar value="#{ShowClassController.newra.radeadline}"/><br/><br/>
+     
+                            <h:commandButton action="#{ShowClassController.NEWRA(ShowClassController.newra, MemberController.GETACCOUNT())}" value="Request assiment"/>
+                    </h:form>
+                </p:panel>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

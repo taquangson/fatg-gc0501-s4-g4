@@ -14,16 +14,17 @@
     </h:head>
 
     <h:body>
+        <div style="background: url('resources/images/TopBackgound.png') center no-repeat;position: absolute; height: 900px; width: 99%; margin: auto; z-index: -1"></div>
         <div id="wrappper">
             <div style="padding-top: 175px;">
             <div id="top">
                 <img src="resources/images/But2Left.png" style="float: left"/>
                 <div id="varbar">
-                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/">Home</a>
-                    <a href="">Your Assiment</a>
-                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/MemberPanel.xhtml">eLearning</a>
-                    <a href="">Feedback</a>
-                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml">FAQs</a>
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/"><img style="float: left" src="resources/images/Home.png"/>&emsp;Home</a>
+                    <a href=""><img style="float: left" src="resources/images/Assiment.png"/>&emsp;Your Assiment</a>
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/MemberPanel.xhtml"><img style="float: left" src="resources/images/eLearning.png"/>&emsp;eLearning</a>
+                    <a href=""><img style="float: left" src="resources/images/Feedback.png"/>&emsp;Feedback</a>
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml"><img style="float: left" src="resources/images/FAQs.png"/>&emsp;FAQs</a>
                 </div>
                 <img src="resources/images/But2Right.png" style="float: right"/>
             </div>
@@ -32,7 +33,7 @@
             <div>
                 <div id="right">
                     <h:form>
-                    <p:panel header="Account panel">
+                        <p:panel header="Account panel">
                         <table style="display: #{MemberController.GETLOGIN()}">
                             <tr>
                                 <td>Username:</td>
@@ -69,7 +70,7 @@
                         </c:if>
                         <c:if test="#{MemberController.GETPERMISSION() == 2}">
                             <p:panel header="Stuff">
-                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/NewAssiment.xhtml">New Assiment for Student</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SelectClassNewAssiment.xhtml">New Assiment for Student</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewFeedback.xhtml">View your Feedback from Student</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewStudentclass.xhtml">Student in your class</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFeedback.xhtml">New Feedback</a><br/>
@@ -90,16 +91,34 @@
                             </p:dataTable>
                         </p:panel>
                     </h:form>
+                    <p:panel header="Lunar Calendar">
+                    <center>
+                        <script type="text/javascript" language="JavaScript" src="http://www.informatik.uni-leipzig.de/~duc/amlich/JavaScript/amlich-hnd.js">
+                        </script>
+                        <script language="JavaScript">
+                        <!--
+                        setOutputSize("small");
+                        document.writeln(printSelectedMonth());
+                        -->
+                        </script>
+                    </center>
+                    </p:panel>
                 </div>
                 <div id="content">
                     <ui:insert name="content">Content</ui:insert>
                 </div>
             </div>
         </div>
-        <div id="bottom">
-            Copyright by GC0501 - Team IV
         </div>
+        <center><img src="resources/images/Spearator.png"/></center>
+        <div style="margin: auto; width: 800px; padding-left: 100px; padding-right: 100px; height: 241px; background: url('resources/images/back2bottom.png') bottom no-repeat">
+            <img src="resources/images/HungPM.png"/>
+            <img src="resources/images/ThaoLTT.png"/>
+            <img src="resources/images/VietPD.png"/>
+            <img src="resources/images/HoangLTM.png"/>
+            <!--<img src="resources/images/DucPH.png"/>-->
+            <br/>Copyright by GC0501 - Team IV - GreenWich-FPT - Hanoi Aptech3 - 2012
+            <br/>Creater: HungPM - ThaoLTT - VietPD - HoangLTM - DucPH
         </div>
-        <center><img src="resources/images/back2bottom.png" style="margin: auto"/></center>
     </h:body>
 </html>

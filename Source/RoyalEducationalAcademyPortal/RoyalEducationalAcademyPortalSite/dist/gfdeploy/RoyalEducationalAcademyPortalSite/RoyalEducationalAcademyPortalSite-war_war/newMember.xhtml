@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <body>
+
+        <ui:composition template="./index.xhtml">
+            <ui:define name="content">
+                <h:form>
+                <p:panel header="Insert New Member!">
+                    <p:messages showDetail="true" />
+            <table>
+                
+            <tr>
+                <td><a>Full Name:</a></td>
+                <td><p:inputText value="#{MemberController.newMemberEntity.mfullname}"/></td>
+            </tr>
+            <tr>
+                <td><a>User Name:</a></td>
+                <td>
+                    <p:inputText id="username" value="#{MemberController.newMemberEntity.musername}"/>
+                    <h:commandButton action="#{MemberController.GETAUTOROLLNUMBER()}" value="Generation username"/>
+                </td>
+            </tr>
+            <tr>
+                <td><a>Password:</a></td>
+                <td><p:password value="#{MemberController.newMemberEntity.mpassword}" feedback="true" minLength="6" /></td>
+            </tr>
+            
+            <tr>
+                <td><a>Address:</a></td>
+                <td><p:inputText value="#{MemberController.newMemberEntity.madress}"/></td>
+            </tr>
+            
+            <tr>
+                <td><a>Email</a></td>
+                <td><p:inputText value="#{MemberController.newMemberEntity.memail}" id="email"/></td>
+            </tr>
+            
+            <tr>
+                
+                <td><a>Avatar</a></td>      
+                <td>
+                </td>
+            </tr>                
+                    
+            <tr>
+                <td><a>Birthday:</a></td>
+                <td><p:calendar value="#{MemberController.newMemberEntity.mbirthdate}" showOn="button"/></td>
+            </tr>
+            <tr>
+                <td><a>Permission</a></td>
+                <td><h:selectOneMenu value="#{MemberController.newpermission}">
+                    <f:selectItem itemLabel="Stuff" itemValue="2"></f:selectItem>
+                    <f:selectItem itemLabel="Student" itemValue="3"></f:selectItem>
+                    </h:selectOneMenu></td>
+            </tr>  
+            <tr>
+                <td colspan="2"><h:commandButton action="#{MemberController.ADDNEWMEMBER()}" value="Insert"/></td>            
+            </tr>
+            
+            </table>
+                    </p:panel>
+            </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
