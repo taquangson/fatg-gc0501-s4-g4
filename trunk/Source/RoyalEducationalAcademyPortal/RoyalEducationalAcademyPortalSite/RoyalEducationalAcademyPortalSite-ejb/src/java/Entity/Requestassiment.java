@@ -6,9 +6,10 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Requestassiment.findAll", query = "SELECT r FROM Requestassiment r"),
-    @NamedQuery(name = "Requestassiment.findByRaid", query = "SELECT r FROM Requestassiment r WHERE r.raid = :raid"),
+    @NamedQuery(name = "Requestasssiment.findByRaid", query = "SELECT r FROM Requestassiment r WHERE r.raid = :raid"),
     @NamedQuery(name = "Requestassiment.findByRaname", query = "SELECT r FROM Requestassiment r WHERE r.raname = :raname"),
     @NamedQuery(name = "Requestassiment.findByRainfo", query = "SELECT r FROM Requestassiment r WHERE r.rainfo = :rainfo"),
     @NamedQuery(name = "Requestassiment.findByRafilename", query = "SELECT r FROM Requestassiment r WHERE r.rafilename = :rafilename"),
@@ -39,8 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Requestassiment implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "RAID")
     private Integer raid;
     @Size(max = 80)

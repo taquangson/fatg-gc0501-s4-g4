@@ -25,6 +25,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -62,8 +65,36 @@ public class ShowClassController {
     public void valueChangeMethod(ValueChangeEvent e){
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "xxx", "xxx"));
     }
+    
+    public void HACKCLASSID(){
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        int cid = 0;
+        try{
+            cid = Integer.parseInt(request.getParameter("classid"));
+            session.setAttribute("classid", cid);
+        }catch(Exception ex){
+        }
+        List<Members> rs = new ArrayList<Members>();
+        if (cid != 0) {
+            Entity.Class mclass = classFacade.find(cid);
+            List<Classmember> mrs = classmemberFacade.findAll();
+            Memberpermission mpm = memberpermissionFacade.find(3);
+            for (int i = 0; i < mrs.size(); i++) {
+                if (mrs.get(i).getCid().equals(mclass) && mrs.get(i).getMid().getMpermission().equals(mpm)) {
+                    rs.add(mrs.get(i).getMid());
+                }
+            }
+        }
+        setMemberClass(rs);
+    }
 
-    public List<Course> SHOWCOURSE(int cid) {
+    public List<Course> SHOWCOURSE() {
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        int cid = Integer.parseInt(session.getAttribute("classid").toString());
         List<Course> rs = new ArrayList<Course>();
         if (cid != 0) {
             Entity.Class mclass = classFacade.find(cid);
@@ -79,7 +110,15 @@ public class ShowClassController {
         return classFacade.findAll();
     }
 
-    public void NEWRA(Requestassiment newrax, Members mem, int cid) {
+    public void NEWRA(Requestassiment newrax, Members mem) {
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        int cid = 0;
+        try{
+            cid = Integer.parseInt(session.getAttribute("classid").toString());
+        }catch(Exception ex){
+        }
         int cid2 = selectedCID2;
         int error = 0;
         if (newrax.getRaname().equals("")) {
@@ -109,23 +148,20 @@ public class ShowClassController {
             newrax.setCid2(courseFacade.find(cid2));
             newrax.setStuffmid(mem);
             requestassimentFacade.ADD(newrax);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Assiment has been requested", "Name: " + newra.getRaname()));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "New Assiment has been requested", "Name: " + newra.getRaname()+" | CLass: "+ newra.getCid().getCname()+" | Course: "+newra.getCid2().getCname()));
         }
     }
 
-    public void SETUPMEMBERCLASS(int cid) {
+    public int SETUPMEMBERCLASS() {
+        int cid = 0;
         List<Members> rs = new ArrayList<Members>();
-        if (cid != 0) {
-            Entity.Class mclass = classFacade.find(cid);
-            List<Classmember> mrs = classmemberFacade.findAll();
-            Memberpermission mpm = memberpermissionFacade.find(3);
-            for (int i = 0; i < mrs.size(); i++) {
-                if (mrs.get(i).getCid().equals(mclass) && mrs.get(i).getMid().getMpermission().equals(mpm)) {
-                    rs.add(mrs.get(i).getMid());
-                }
-            }
+        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        try{
+            cid = Integer.parseInt(req.getParameter("classid"));
+        }catch(Exception ex){
+            
         }
-        setMemberClass(rs);
+        return cid;
     }
 
     public List<Entity.Class> SHOWALLBYMEMBER(Members mem) {

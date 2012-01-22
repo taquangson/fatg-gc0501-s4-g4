@@ -11,10 +11,11 @@
 
             <ui:define name="content">
                 <h:form>
-                    <p:panel header="Bath, Semester and Subject Manager" toggleable="true" toggleSpeed="500" collapsed="true">
-                    </p:panel>
-                    <p:panel header="Class manager" toggleable="true" toggleSpeed="500" collapsed="true">
-                        <p:dataTable value="#{ShowClassController.SHOWALL()}" var="Class">
+                    <p:accordionPanel>
+                    <p:tab title="Bath, Semester and Subject Manager">
+                    </p:tab>
+                    <p:tab title="Class manager">
+                        <p:dataTable paginator="true" rows="10" value="#{ShowClassController.SHOWALL()}" var="Class">
                             <p:column>
                                 #{Class.cid}
                             </p:column>
@@ -28,9 +29,9 @@
                             </p:column>
                         </p:dataTable>
                         <a href="newClass.xhtml">New Class</a>
-                    </p:panel>
-                    <p:panel header="Members Manager" toggleable="true" toggleSpeed="500" collapsed="true">
-                        <p:dataTable value="#{MemberController.SHOWALL()}" var="Member">
+                    </p:tab>
+                    <p:tab title="Members Manager">
+                        <p:dataTable paginator="true" rows="10" value="#{MemberController.SHOWALL()}" var="Member">
                             <p:column headerText="ID">
                                 #{Member.mid}
                             </p:column>
@@ -49,11 +50,11 @@
                             </p:column>
                         </p:dataTable>
                         <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newMember.xhtml">New Member</a>
-                    </p:panel>
-                    <p:panel header="Assiment Report" toggleable="true" toggleSpeed="500" collapsed="true">
-                    </p:panel>
-                    <p:panel header="Feedback and FAQs Manager" toggleable="true" toggleSpeed="500" collapsed="true">
-                        <p:dataTable value="#{FAQsController.SHOWALL()}" var="FAQ">
+                    </p:tab>
+                    <p:tab title="Assiment Report">
+                    </p:tab>
+                    <p:tab title="Feedback and FAQs Manager">
+                        <p:dataTable paginator="true" rows="10" value="#{FAQsController.SHOWALL()}" var="FAQ">
                             <p:column headerText="ID">
                                 #{FAQ.fid}
                             </p:column>
@@ -69,7 +70,8 @@
                             </p:column>
                         </p:dataTable>
                         <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFAQs.xhtml">New FAQs</a>
-                    </p:panel>
+                    </p:tab>
+                    </p:accordionPanel>
                 </h:form>
             </ui:define>
         </ui:composition>

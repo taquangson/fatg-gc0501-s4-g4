@@ -37,7 +37,7 @@ public class BathController {
     public void TreeBean() {
     }  
   
-    public TreeNode getRoot() {
+    public TreeNode GETROOT() {
         
         List<Bath> rs = bathFacade.findAll();
         root = new DefaultTreeNode("Root", null);
@@ -50,7 +50,9 @@ public class BathController {
             if(rs0!=null){
                 TreeNode[] BathNode0 = new TreeNode[rs.size()];
                 for(int y = 0; y < rs0.size() ; y++){
-                    BathNode0[y] = new DefaultTreeNode(rs0.get(y).getSname(), BathNode[i]);
+                    //Some error here
+                    //BathNode0[y] = new DefaultTreeNode(rs0.get(y).getSname(), BathNode[i]);
+                    BathNode0[0] = new DefaultTreeNode(rs0.get(y).getSname(), BathNode[i]);
                     List<Course> rs00 = rs0.get(y).getCourseList();
                     if(rs00!=null){
                         TreeNode[] BathNode00 = new TreeNode[rs00.size()];
@@ -61,7 +63,7 @@ public class BathController {
                                 TreeNode[] BathNode000 = new TreeNode[rs000.size()];
                                 for(int f = 0; f < rs000.size() ; f++){
                                     //Add link to assiment view page.
-                                   BathNode000[f] = new DefaultTreeNode("<a href=http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssiment.xhtml?class="+rs000.get(f).getClass1().getCid()+"&course="+rs000.get(f).getCourse().getCid()+">"+rs000.get(f).getClass1().getCname()+"</a>", BathNode00[f]);
+                                   BathNode000[f] = new DefaultTreeNode("<a href=http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssiment.xhtml?classid="+rs000.get(f).getClass1().getCid()+"&courseid="+rs000.get(f).getCourse().getCid()+">"+rs000.get(f).getClass1().getCname()+"</a>", BathNode00[f]);
                                 }
                             }
                         }

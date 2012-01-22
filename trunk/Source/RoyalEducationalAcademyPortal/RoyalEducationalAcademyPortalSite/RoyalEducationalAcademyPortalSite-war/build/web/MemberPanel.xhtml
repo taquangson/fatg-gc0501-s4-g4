@@ -11,8 +11,8 @@
 
             <ui:define name="content">
                 <h:form>
-                    <p:panel>
-                        <p:tree value="#{BathController.root}" var="Bath" selectionMode="single"  
+                    <p:panel header="Select your class">
+                        <p:tree value="#{BathController.GETROOT()}" var="Bath" selectionMode="single"  
             selection="#{BathController.selectedNode}">
                             <p:treeNode>
                                 <h:outputText value="#{Bath}"/>
