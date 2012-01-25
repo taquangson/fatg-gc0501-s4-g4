@@ -21,9 +21,10 @@ import javax.faces.context.FacesContext;
  *
  * @author SVN - Team
  */
-@ManagedBean(name="FeedBackController")
+@ManagedBean(name = "FeedBackController")
 @RequestScoped
 public class FeedBackController {
+
     @EJB
     private MembersFacade member1Facade;
     @EJB
@@ -36,36 +37,38 @@ public class FeedBackController {
         NewFeedBack = new Feedback();
         SeletedMemberID = 1;
     }
-    public void DELETE(int id){
+
+    public void DELETE(int id) {
         feedbackFacade.DELETE(id);
     }
-    
-    public List<Feedback> SHOWFEEDBACKBYMEMBER(Members ms){
+
+    public List<Feedback> SHOWFEEDBACKBYMEMBER(Members ms) {
         List<Feedback> rs = feedbackFacade.findAll();
         List<Feedback> rt = new ArrayList<Feedback>();
-        for(int i = 0; i < rs.size();i++){
-            if(rs.get(i).getMid().equals(ms)){
+        for (int i = 0; i < rs.size(); i++) {
+            if (rs.get(i).getMid().equals(ms)) {
                 rt.add(rs.get(i));
             }
         }
         return rt;
     }
-    
-    public void ADDNEWFEEDBACK(){
-        if(NewFeedBack.getFbquestion().isEmpty()){
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Content is empty.", "Type what you want to feedback."));
-        }else{
+
+    public void ADDNEWFEEDBACK() {
+        if (NewFeedBack.getFbquestion().isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Content is empty.", "Type what you want to feedback."));
+        } else {
             NewFeedBack.setFbdate(new Date());
             NewFeedBack.setMid(new Members(SeletedMemberID));
             feedbackFacade.ADDNEWFEEDBACK(NewFeedBack);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Feedback successful sent.", "Your feedback is complete.")); 
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Feedback successful sent.", "Your feedback is complete."));
         }
         //feedbackFacade.ADDNEWFEEDBACK(NewFeedBack);
     }
-    public Members GETACCOUNT(){
+
+    public Members GETACCOUNT() {
         Members account = new Members();
-            account.setMid(1);
-            account = member1Facade.find(account.getMid());
+        account.setMid(1);
+        account = member1Facade.find(account.getMid());
         return account;
     }
 

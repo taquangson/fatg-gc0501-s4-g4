@@ -30,4 +30,13 @@ public class ClassmemberFacade extends AbstractFacade<Classmember> {
     public List<Classmember> SHOWALL(){
         return em.createNamedQuery("Classmember.findAll").getResultList();
     }
+    public void ADD(Classmember newmem){
+        em.persist(newmem);
+        em.flush();
+    }
+    public void DELETE(int id){
+        Classmember rmem = em.find(Classmember.class, id);
+        em.remove(rmem);
+        em.flush();
+    }
 }

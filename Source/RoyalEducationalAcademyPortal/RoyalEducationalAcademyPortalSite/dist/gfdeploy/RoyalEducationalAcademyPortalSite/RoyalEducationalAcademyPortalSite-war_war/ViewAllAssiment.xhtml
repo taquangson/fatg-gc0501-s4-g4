@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                #{AssimentController.SETUPASSIMENTVIEW()}
+                <p:panel header="All Assiment">
+                        <c:forEach var="ra" items="#{AssimentController.GETALLASSIMENTBYCLASS()}">
+                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SubmitAssiment.xhtml?assimentid=#{ra.raid}">
+                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
+                                    <img src="resources/images/ExpiredIcon.png"/>
+                                </c:if>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)}">
+                                    <img src="resources/images/in_progress.png"/>
+                                </c:if>
+                                 "#{ra.stuffmid.mfullname}" request you "#{ra.raname}" from "#{ra.radate}"
+                            </a><br/>
+                        </c:forEach>
+                </p:panel>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -25,5 +25,13 @@ public class SubmitassimentFacade extends AbstractFacade<Submitassiment> {
     public SubmitassimentFacade() {
         super(Submitassiment.class);
     }
+    public void ADD(Submitassiment newsass){
+        try{
+            em.persist(newsass);
+            em.flush();
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
     
 }

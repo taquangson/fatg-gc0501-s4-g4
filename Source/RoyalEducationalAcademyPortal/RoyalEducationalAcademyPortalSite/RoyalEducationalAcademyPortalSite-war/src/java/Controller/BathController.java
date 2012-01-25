@@ -23,47 +23,51 @@ import org.primefaces.model.TreeNode;
 @ManagedBean(name = "BathController")
 @RequestScoped
 public class BathController {
+
     @EJB
     private BathFacade bathFacade;
     private TreeNode selectedNode;
+
     /** Creates a new instance of BathController */
     public BathController() {
     }
-    public List<Bath> SHOWALL(){
+
+    public List<Bath> SHOWALL() {
         return bathFacade.findAll();
     }
-    private TreeNode root;  
-  
+    private TreeNode root;
+
     public void TreeBean() {
-    }  
-  
+    }
+    //Get a full root for show in TreeView, not works well
+
     public TreeNode GETROOT() {
-        
+
         List<Bath> rs = bathFacade.findAll();
         root = new DefaultTreeNode("Root", null);
         TreeNode[] BathNode = new TreeNode[rs.size()];
-        for(int i = 0; i < rs.size() ; i++){
+        for (int i = 0; i < rs.size(); i++) {
             //Add to root node
             BathNode[i] = new DefaultTreeNode(rs.get(i).getBname(), root);
             //A lot of loop for display all bath, sem, course
             List<Sem> rs0 = rs.get(i).getSemList();
-            if(rs0!=null){
+            if (rs0 != null) {
                 TreeNode[] BathNode0 = new TreeNode[rs.size()];
-                for(int y = 0; y < rs0.size() ; y++){
+                for (int y = 0; y < rs0.size(); y++) {
                     //Some error here
                     //BathNode0[y] = new DefaultTreeNode(rs0.get(y).getSname(), BathNode[i]);
                     BathNode0[0] = new DefaultTreeNode(rs0.get(y).getSname(), BathNode[i]);
                     List<Course> rs00 = rs0.get(y).getCourseList();
-                    if(rs00!=null){
+                    if (rs00 != null) {
                         TreeNode[] BathNode00 = new TreeNode[rs00.size()];
-                        for(int z = 0; z < rs00.size() ; z++){
+                        for (int z = 0; z < rs00.size(); z++) {
                             BathNode00[z] = new DefaultTreeNode(rs00.get(z).getCname(), BathNode0[z]);
                             List<Classincourse> rs000 = rs00.get(z).getClassincourseList();
-                            if(rs000!=null){
+                            if (rs000 != null) {
                                 TreeNode[] BathNode000 = new TreeNode[rs000.size()];
-                                for(int f = 0; f < rs000.size() ; f++){
+                                for (int f = 0; f < rs000.size(); f++) {
                                     //Add link to assiment view page.
-                                   BathNode000[f] = new DefaultTreeNode("<a href=http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssiment.xhtml?classid="+rs000.get(f).getClass1().getCid()+"&courseid="+rs000.get(f).getCourse().getCid()+">"+rs000.get(f).getClass1().getCname()+"</a>", BathNode00[f]);
+                                    BathNode000[f] = new DefaultTreeNode("<a href=http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssiment.xhtml?classid=" + rs000.get(f).getClass1().getCid() + "&courseid=" + rs000.get(f).getCourse().getCid() + ">" + rs000.get(f).getClass1().getCname() + "</a>", BathNode00[f]);
                                 }
                             }
                         }
@@ -71,8 +75,8 @@ public class BathController {
                 }
             }
         }
-        
-        return root;  
+
+        return root;
     }
 
     /**

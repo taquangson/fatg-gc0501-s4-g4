@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html">
 
@@ -12,11 +12,14 @@
             <ui:define name="content">
                 <h:form>
                     <p:panel header="New FAQs Panel">
-                            <h:outputLabel value="Question"/>
+                        <p:messages id="messege"/>
+                        <p:fieldset legend="Question">
                             <p:editor  value="#{FAQsController.newQuestion}"/>
-                            <h:outputLabel value="Answer"/>
+                        </p:fieldset>
+                        <p:fieldset legend="Answer">
                             <p:editor  value="#{FAQsController.newAnswer}"/>
-                            <h:commandButton value="Save" action="#{FAQsController.newFAQs()}"/>
+                        </p:fieldset>
+                        <p:commandButton value="Save" onclick="@form" action="#{FAQsController.newFAQs()}"/>
                     </p:panel>
                 </h:form>
             </ui:define>

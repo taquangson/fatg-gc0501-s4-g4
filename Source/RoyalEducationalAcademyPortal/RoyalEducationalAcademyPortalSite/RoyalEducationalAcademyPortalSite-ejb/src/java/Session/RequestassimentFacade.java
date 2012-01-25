@@ -28,6 +28,7 @@ public class RequestassimentFacade extends AbstractFacade<Requestassiment> {
     public void ADD(Requestassiment newx){
         try{
             em.persist(newx);
+            em.flush();
         }catch(Exception ex){
             ex.printStackTrace();
         }

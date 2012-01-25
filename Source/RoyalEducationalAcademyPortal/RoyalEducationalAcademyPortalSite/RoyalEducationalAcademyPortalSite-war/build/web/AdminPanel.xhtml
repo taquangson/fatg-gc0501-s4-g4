@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html">
 
@@ -11,6 +11,7 @@
 
             <ui:define name="content">
                 <h:form>
+                    <p:growl id="message"/>
                     <p:accordionPanel>
                     <p:tab title="Bath, Semester and Subject Manager">
                     </p:tab>
@@ -45,8 +46,8 @@
                                 #{Member.mpermission.mpname}
                             </p:column>
                             <p:column>
-                                <h:commandButton action="#{MemberController.DELETEMEMBER(Member.mid)}" value="Delete"/>
-                                <h:commandButton value="Edit"/>
+                                <p:commandButton onclick="@form" action="#{MemberController.DELETEMEMBER(Member.mid)}" value="Delete"/>
+                                <p:commandButton value="Edit"/>
                             </p:column>
                         </p:dataTable>
                         <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newMember.xhtml">New Member</a>
@@ -65,8 +66,8 @@
                                 #{FAQ.fanswer}
                             </p:column>
                             <p:column>
-                                <h:commandButton action="#{FAQsController.DELETE(FAQ.fid)}" value="Delete"/>
-                                <h:commandButton value="Edit"/>
+                                <p:commandButton onclick="@form" action="#{FAQsController.DELETE(FAQ.fid)}" value="Delete"/>
+                                <p:commandButton value="Edit"/>
                             </p:column>
                         </p:dataTable>
                         <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFAQs.xhtml">New FAQs</a>

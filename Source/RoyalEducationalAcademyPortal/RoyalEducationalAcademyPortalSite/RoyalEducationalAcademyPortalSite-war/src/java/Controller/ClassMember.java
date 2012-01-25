@@ -45,7 +45,7 @@ public class ClassMember {
         pickMember = new ArrayList<Members>();
         listmode = new DualListModel<Members>(sourceMember, pickMember);
     }
-    
+    //Show a course by cid
     public List<Course> SHOWCOURSE(int cid) {
         List<Course> rs = new ArrayList<Course>();
         if (cid != 0) {
@@ -57,7 +57,7 @@ public class ClassMember {
         }
         return rs;
     }
-    
+    //Show a class depend on account
     public List<Entity.Class> SHOWCLASSBYACCOUNT(Members account){
         List<Entity.Class> rs = new ArrayList<Entity.Class>();
         List<Classmember> clrs = classmemberFacade.findAll();
@@ -67,11 +67,21 @@ public class ClassMember {
         }
         return rs;
     }
-    
+    //Get a class id from account
+    public String SHOWCIDBYACCOUNT(Members account){
+        List<Entity.Class> rs = new ArrayList<Entity.Class>();
+        List<Classmember> clrs = classmemberFacade.findAll();
+        for(int i = 0; i< clrs.size(); i++){
+            if(clrs.get(i).getMid().equals(account)){
+                rs.add(clrs.get(i).getCid());            }
+        }
+        return rs.get(0).getCid().toString();
+    }
+    //Show all class by List
     public List<Entity.Class> SHOWALLCLASS(){
         return classFacade.findAll();
     }
-    
+    //Just for Testing OneMenuSelect, not use
     public String[] SHOWCLASSSELECT(){
         List<Entity.Classmember> classrs = classmemberFacade.SHOWALL();
         String[] rs = new String[classrs.size()];

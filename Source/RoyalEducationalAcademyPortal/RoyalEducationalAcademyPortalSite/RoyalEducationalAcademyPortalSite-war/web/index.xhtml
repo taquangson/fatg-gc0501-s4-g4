@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
@@ -21,7 +21,7 @@
                 <img src="resources/images/But2Left.png" style="float: left"/>
                 <div id="varbar">
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/"><img style="float: left" src="resources/images/Home.png"/>&emsp;Home</a>
-                    <a href=""><img style="float: left" src="resources/images/Assiment.png"/>&emsp;Your Assiment</a>
+                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAllAssiment.xhtml"><img style="float: left" src="resources/images/Assiment.png"/>&emsp;Assiment</a>
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/MemberPanel.xhtml"><img style="float: left" src="resources/images/eLearning.png"/>&emsp;eLearning</a>
                     <a href=""><img style="float: left" src="resources/images/Feedback.png"/>&emsp;Feedback</a>
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml"><img style="float: left" src="resources/images/FAQs.png"/>&emsp;FAQs</a>
@@ -46,8 +46,8 @@
                             <tr>
                                 <td></td>
                                 <td>
-                                    <h:commandButton value="Login" action="#{MemberController.LOGIN(MemberController.username, MemberController.password)}"/>
-                                    <button type="reset">Clear</button>
+                                    <p:commandButton onclick="@form" value="Login" action="#{MemberController.LOGIN(MemberController.username, MemberController.password)}"/>
+                                    <p:commandButton type="reset">Clear</p:commandButton>
                                 </td>
                             </tr>
                             </table>
@@ -71,14 +71,19 @@
                         <c:if test="#{MemberController.GETPERMISSION() == 2}">
                             <p:panel header="Stuff">
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SelectClassNewAssiment.xhtml">New Assiment for Student</a><br/>
-                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewFeedback.xhtml">View your Feedback from Student</a><br/>
-                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewStudentclass.xhtml">Student in your class</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssimentStuff.xhtml">View your Assiment</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewFeedback.xhtml">View your Feedback</a><br/>
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewStudentclass.xhtml">Student in your Class</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFeedback.xhtml">New Feedback</a><br/>
                             </p:panel>
                         </c:if>
                         <c:if test="#{MemberController.GETPERMISSION() == 3}">
                             <p:panel header="Student">
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFeedback.xhtml">New Feedback</a><br/>
+                                <c:forEach var="classes" items="#{ClassMemberController.SHOWCLASSBYACCOUNT(MemberController.GETACCOUNT())}">
+                                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAllAssiment.xhtml?classid=#{classes.cid}">View All #{classes.cname} Assiment</a><br/>
+                                </c:forEach>
+                                
                             </p:panel>
                         </c:if>
                         </c:if>
@@ -105,7 +110,12 @@
                     </p:panel>
                 </div>
                 <div id="content">
-                    <ui:insert name="content">Content</ui:insert>
+                    <ui:insert name="content">
+                        #{AssimentController.SETUPSCHEDULE()}
+                        <p:fieldset legend="Assiment Schedule">
+                            <p:schedule value="#{AssimentController.eventModel}" widgetVar="assimentschedule"/> 
+                        </p:fieldset>
+                    </ui:insert>
                 </div>
             </div>
         </div>
