@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <p:panel header="View full member information">
+                <h:form enctype="multipart/form-data" prependId="false">
+                    <p:dataGrid var="Member" value="#{MemberController.GETACCOUNTBYID()}">
+                    <table>
+                        <tr>
+                            <td>Fullname</td>
+                            <td>#{Member.mfullname}</td>
+                        </tr>
+                        <tr>
+                            <td>Username/rollnumber</td>
+                            <td>#{Member.musername}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>#{Member.madress}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>#{Member.memail}</td>
+                        </tr>
+                        <tr>
+                            <td>Birthday</td>
+                            <td>#{Member.mbirthdate}</td>
+                        </tr>
+                    </table>
+                    </p:dataGrid>
+                </h:form>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

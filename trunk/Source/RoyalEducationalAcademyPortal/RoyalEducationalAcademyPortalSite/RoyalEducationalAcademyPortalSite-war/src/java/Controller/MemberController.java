@@ -7,10 +7,11 @@ package Controller;
 import Entity.Classmember;
 import Entity.Memberpermission;
 import Entity.Members;
+import Session.ClassFacade;
 import Session.ClassmemberFacade;
-import Session.FeedbackFacade;
 import Session.MemberpermissionFacade;
 import Session.MembersFacade;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -36,11 +39,10 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean(name = "MemberController")
 @RequestScoped
 public class MemberController {
-
+    @EJB
+    private ClassFacade classFacade;
     @EJB
     private ClassmemberFacade classmemberFacade;
-    @EJB
-    private FeedbackFacade feedbackFacade;
     @EJB
     private MemberpermissionFacade memberpermissionFacade;
     @EJB
@@ -54,14 +56,75 @@ public class MemberController {
     private UploadedFile file;
     private List<Members> MembersList;
     private DualListModel<Members> listmode;
+    private byte[] TempAvarta;
+    private UploadedFile newfile;
 
     /** Creates a new instance of MemberController */
     public MemberController() {
         MemberEntity = new Members();
         NewMemberEntity = new Members();
         //MembersList = new ArrayList<Members>();
+        TempAvarta = new byte[0];
 
-
+    }
+    public List<Members> SHOWMEMBERSBYCLASSID(int cid){
+        List<Members> mems = new ArrayList<Members>();
+        List<Classmember> lmem = new ArrayList<Classmember>();
+        Entity.Class cl = new Entity.Class();
+        cl = classFacade.find(cid);
+        try{
+            lmem = cl.getClassmemberList();
+        }catch(Exception ex){
+            
+        }
+        for(int i = 0; i < lmem.size(); i++){
+            if(lmem.get(i).getCid().equals(cl)&&lmem.get(i).getMid().getMpermission().equals(new Memberpermission(3))){
+                mems.add(lmem.get(i).getMid());
+            }
+        }
+        return mems;
+    }
+    public List<Entity.Class> GETCLASSFROMSTUFF(Members mem){
+        List<Entity.Class> cll = new ArrayList<Entity.Class>();
+        List<Classmember> lmem = new ArrayList<Classmember>();
+        try{
+            lmem = classmemberFacade.SHOWALL();
+        }catch(Exception ex){
+            
+        }
+        for(int i = 0; i < lmem.size(); i++){
+            if(lmem.get(i).getMid().equals(mem)){
+                cll.add(lmem.get(i).getCid());
+            }
+        }
+        return cll;
+    }
+    //Get a image Stream from a byte[]
+    public StreamedContent GETMEMBERAVARTA(byte[] ByteAvarta){
+        DefaultStreamedContent MemberAvarta = new DefaultStreamedContent();
+        MemberAvarta = new DefaultStreamedContent(new ByteArrayInputStream(ByteAvarta), "image/jpg", "avarta.jpg");
+        return MemberAvarta;
+    }
+    public void SAVEAVRTA(UploadedFile file){
+        try {
+            TempAvarta = new byte[FileUpload2Byte(file).length];
+            TempAvarta = FileUpload2Byte(file);
+        } catch (IOException ex) {
+            Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public byte[] FileUpload2Byte(UploadedFile file) throws IOException{
+        byte[] buffer = new byte[(int)file.getSize()];
+        int bulk;
+        InputStream inputStream = file.getInputstream();
+        while (true) {
+            bulk = inputStream.read(buffer);
+            if (bulk < 0) {
+                break;
+            }
+        }
+        inputStream.close();
+        return buffer;
     }
 
     public void ONDROP(DragDropEvent ddEvent) {
@@ -69,15 +132,71 @@ public class MemberController {
         listmode.getTarget().add(mem);
         listmode.getSource().remove(mem);
     }
-
+    //Save Paramerter to session
+    public void CLASSPR2CLASSSS(){
+        try{
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            HttpSession session = request.getSession(true);
+            int cid = Integer.parseInt(request.getParameter("cid"));
+            session.setAttribute("cid", cid);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+    }
+    //Get members information by id in URL
+    public Members GETACCOUNTBYID(){
+        Members mem = new Members();
+        try{
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+            HttpSession session = request.getSession(true);
+            int mid = Integer.parseInt(request.getParameter("memberid"));
+            mem = member1Facade.find(mid);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return mem;
+    }
     public void SAVECLASSMEMBER(List<Members> pickMember) {
         int size = listmode.getTarget().size();
-        //List<Members> pickMember = listmode.getTarget();
+        //Get class entity from url
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        int cid = Integer.parseInt(session.getAttribute("cid").toString());
+        
+        //Create code block get members in id and add to memberinclass table.
+        //Remove all member in class :D
+        Entity.Class classes = classFacade.find(cid);
+        List<Classmember> cmList = new ArrayList<Classmember>();
+        cmList  = classes.getClassmemberList();
+        for(int i = 0; i < cmList.size(); i++){
+            try{
+                int cccid = 0;
+                cccid = cmList.get(i).getCmid();
+               classmemberFacade.DELETE(cccid); 
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
+        
+        //Get all member in selected panel and add to class
+        
         for (int i = 0; i < size; i++) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Member added!", listmode.getTarget().get(i) + ""));
+            int mid = Integer.parseInt(listmode.getTarget().get(i)+"");
+            Members mem = member1Facade.find(mid);
+            Classmember newcm = new Classmember();
+            newcm.setCid(classes);
+            newcm.setMid(mem);
+            classmemberFacade.ADD(newcm);
+            //Entity.Class classes = classFacade.find(cid);
+            //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Member added!", mid + ""));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Member added!", mem.getMfullname() + " add to "+classes.getCname()));
         }
     }
-
+    //Creating a dual list for add class function in SetMember2Class.xhtml
     public void SETDUALLIST() {
         List<Members> sourceMember = member1Facade.findAll();
         sourceMember.remove(GETACCOUNT());
@@ -93,7 +212,7 @@ public class MemberController {
 
         listmode = new DualListModel<Members>(sourceMember, pickMember);
     }
-
+    //Get all Stuff and Admin account for select
     public List<Members> GETSTUFFANDADMIN() {
         List<Members> rs = new ArrayList<Members>();
         Members madmin = new Members();
@@ -103,11 +222,11 @@ public class MemberController {
         rs.add(madmin);
         return rs;
     }
-
+    //Get id of permission in current account
     public int GETPERMISSION() {
         return GETACCOUNT().getMpermission().getMpid();
     }
-
+    ///Hack for removing all non-Eng-Alphabeta character
     public String removeNonAlphabeta(String text) {
         //Solving Vietnamese (utf-8) problem :)
         text = ReplaceStringNew(text, "âấầẫẩậàáảãạ", 'a');
@@ -126,14 +245,14 @@ public class MemberController {
         text = ReplaceStringNew(text, "ÙÚỦŨỤ", 'U');
         return text;
     }
-
+    //Use RemoveNonAlphabetaCharacter function for String
     public String ReplaceStringNew(String text, String list, char c) {
         for (int i = 0; i < list.length(); i++) {
             text = text.replace(list.charAt(i), c);
         }
         return text;
     }
-
+    //Remove all number and special character in a String
     public String removeNonDigits(String text) {
         int length = text.length();
         StringBuffer buffer = new StringBuffer(length);
@@ -145,7 +264,7 @@ public class MemberController {
         }
         return buffer.toString();
     }
-
+    //Get a +1 from highest number id
     public String GETNEWMEMBERID() {
         int id = 0;
         String sid = "";
@@ -165,7 +284,7 @@ public class MemberController {
         id++;
         return (sid + id);
     }
-
+    //Full funtion for get a new roll number, for creating new member
     public void GETAUTOROLLNUMBER() {
         String rollnumber = "";// blank
         String name = "";
@@ -182,15 +301,16 @@ public class MemberController {
         rollnumber = removeNonAlphabeta(name + rollnumber + GETNEWMEMBERID());
         NewMemberEntity.setMusername(rollnumber);
     }
-
+    //Delete a member and show a growl dialog
     public void DELETEMEMBER(String id) {
         member1Facade.DELETE(Integer.parseInt(id));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Deleted member successful!", "Complete"));
     }
-
+    //Show all members by List
     public List<Members> SHOWALL() {
         return member1Facade.findAll();
     }
-
+    //this function isn't use, just for code needed
     public void SAVEUPLOADFILETOAVERTA() {
         MemberEntity = GETACCOUNT();
         InputStream inputStream = null;
@@ -212,7 +332,7 @@ public class MemberController {
         }
         SAVEACCOUNT();
     }
-
+    //Creating a new member from MembersEntity
     public void ADDNEWMEMBER() {
         int error = 0;
         if (NewMemberEntity.getMfullname().isEmpty()) {
@@ -237,6 +357,7 @@ public class MemberController {
         }
         NewMemberEntity.setMpassword(new MD5().String2MD5(NewMemberEntity.getMpassword()));
         NewMemberEntity.setMpermission(new Memberpermission(newpermission));
+        NewMemberEntity.setMavarta(TempAvarta);
         if (error == 0) {
             member1Facade.ADD(NewMemberEntity);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Member " + NewMemberEntity.getMusername() + " added!", "Successful!"));
@@ -254,20 +375,21 @@ public class MemberController {
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (IOException ex) {
             Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        }
+        finally {
             try {
                 inputStream.close();
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(MemberController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
-
+    // Change password for current account
     public void CHANGEPASSWORD() {
         FacesMessage msg = new FacesMessage("Succesful", " Password is change.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    //Login and set all session for validate in case
     public void LOGIN(String username, String password) {
         username = username.toLowerCase();
         boolean valid = false;
@@ -332,7 +454,7 @@ public class MemberController {
             return "inline";
         }
     }
-
+    //Get all information of current account
     public Members GETACCOUNT() {
         Members account = new Members();
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -346,7 +468,7 @@ public class MemberController {
         }
         return account;
     }
-
+    //Logout and clear all session account
     public void LOGOUT() {
         String newpage = "http://localhost:8080/RoyalEducationalAcademyPortalSite-war/";
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -364,11 +486,22 @@ public class MemberController {
     }
 
     public void SAVEACCOUNT() {
+        if(newfile!=null){
+        MemberEntity.setMavarta(newfile.getContents());
+        }
         member1Facade.UPDATE(MemberEntity);
         FacesMessage msg = new FacesMessage("Succesful", "Information is saved!");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    public void SAVEACCOUNT(UploadedFile newfilex) {
+        if(newfilex!=null){
+        MemberEntity.setMavarta(newfilex.getContents());
+        }
+        member1Facade.UPDATE(MemberEntity);
+        FacesMessage msg = new FacesMessage("Succesful", "Information is saved!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    //Code below is auto generation from Netbeans
     /**
      * @return the username
      */
@@ -479,5 +612,33 @@ public class MemberController {
      */
     public void setListmode(DualListModel<Members> listmode) {
         this.listmode = listmode;
+    }
+
+    /**
+     * @return the TempAvarta
+     */
+    public byte[] getTempAvarta() {
+        return TempAvarta;
+    }
+
+    /**
+     * @param TempAvarta the TempAvarta to set
+     */
+    public void setTempAvarta(byte[] TempAvarta) {
+        this.TempAvarta = TempAvarta;
+    }
+
+    /**
+     * @return the newfile
+     */
+    public UploadedFile getNewfile() {
+        return newfile;
+    }
+
+    /**
+     * @param newfile the newfile to set
+     */
+    public void setNewfile(UploadedFile newfile) {
+        this.newfile = newfile;
     }
 }

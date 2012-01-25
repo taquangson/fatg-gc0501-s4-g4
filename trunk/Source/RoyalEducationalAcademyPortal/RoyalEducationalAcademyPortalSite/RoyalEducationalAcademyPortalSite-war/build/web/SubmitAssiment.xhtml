@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <p:panel header="Assiment submition">
+                    #{AssimentController.HackRAID()}
+                    <h:form enctype="multipart/form-data" prependId="false">
+                        <table>
+                            <tr>
+                                <td>Assiment name:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().raname}</td>
+                            </tr>
+                            <tr>
+                                <td>Course:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().cid2.cname}</td>
+                            </tr>
+                            <tr>
+                                <td>Class:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().cid.cname}</td>
+                            </tr>
+                            <tr>
+                                <td>Information:</td>
+                                <td><h:outputText escape="false" value="#{AssimentController.GETASSIMENTBYID().rainfo}"/></td>
+                            </tr>
+                            <tr>
+                                <td>Download document</td>
+                                <td><a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/assiment/#{AssimentController.GETASSIMENTBYID().cid2.cid}/#{AssimentController.GETASSIMENTBYID().rafilename}">#{AssimentController.GETASSIMENTBYID().rafilename}</a></td>
+                            </tr>
+                            <tr>
+                                <td>Dead line:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().radeadline}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(AssimentController.GETASSIMENTBYID().radeadline)!=true}">
+                                    <img src="resources/images/ExpiredIcon.png"/>
+                                </c:if>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(AssimentController.GETASSIMENTBYID().radeadline)}">
+                                    <img src="resources/images/in_progress.png"/>
+                                </c:if>
+                                </td>
+                                <td>
+                                        <p:fileUpload disabled="#{AssimentController.VALIDDEADLINE(AssimentController.GETASSIMENTBYID().radeadline)==false}" fileUploadListener="#{AssimentController.handleFileUpload}" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" auto="true" update="messages" sizeLimit="40000000" label="Submit your file" /><br/>
+                                        <p:messages id="messages" showDetail="true"/> 
+                                </td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </p:panel>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

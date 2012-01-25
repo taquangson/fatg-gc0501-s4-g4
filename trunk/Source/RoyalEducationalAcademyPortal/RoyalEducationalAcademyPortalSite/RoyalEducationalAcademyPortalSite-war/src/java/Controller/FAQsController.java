@@ -6,15 +6,14 @@ package Controller;
 
 import Entity.Faq;
 import Session.FaqFacade;
-import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -23,32 +22,35 @@ import javax.servlet.http.HttpServletResponse;
 @ManagedBean(name = "FAQsController")
 @RequestScoped
 public class FAQsController {
-    private String newAnswer, newQuestion; 
-    
+
+    private String newAnswer, newQuestion;
     @EJB
     private FaqFacade faqFacade;
-    
-    
 
     /** Creates a new instance of FAQsController */
     public FAQsController() {
     }
-    
-    public void DELETE(String id){
+    //Deleting a FAQs
+
+    public void DELETE(String id) {
         faqFacade.DELETE(Integer.parseInt(id));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "FAQs Deleted!", "Completed!"));
     }
-    
-    public void newFAQs(){
+    //Creating a new FAQs
+
+    public void newFAQs() {
         try {
             faqFacade.newFAQs(newQuestion, newAnswer);
-            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.sendRedirect("http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml");
-        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "FAQs added!", "Completed!"));
+//            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//            response.sendRedirect("http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml");
+        } catch (Exception ex) {
             Logger.getLogger(FAQsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public List<Faq> SHOWALL(){
+    //Show all FAQs by List
+
+    public List<Faq> SHOWALL() {
         return faqFacade.findAll();
     }
 

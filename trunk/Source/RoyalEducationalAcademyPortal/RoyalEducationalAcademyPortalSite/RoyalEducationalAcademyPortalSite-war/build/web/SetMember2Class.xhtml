@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
@@ -12,34 +12,23 @@
 
             <ui:define name="content">
                 <h:form>
+                    #{MemberController.CLASSPR2CLASSSS()}
                     <p:messages showDetail="true" />
                 #{MemberController.SETDUALLIST()}
                 <p:panel header="Set Members for Class">
-                    <p:pickList value="#{MemberController.listmode}" var="member" iconOnly="true" itemLabel="#{member.mfullname}" effect="bounce">
+                    <p:pickList value="#{MemberController.listmode}" var="member" itemValue="#{member.mid}" itemLabel="#{member.mfullname}" effect="bounce">
                     <f:facet name="sourceCaption">Members not in class</f:facet>  
                     <f:facet name="targetCaption">Members in class</f:facet>
                     <p:column style="width:50%">  
-                        #{member.mfullname}
+                        #{member.mpermission.mpname}
                     </p:column>
                      <p:column style="width:50%;">
                          #{member.mfullname}
                     </p:column>
                     </p:pickList>
-                    <p:dataTable var="source" value="#{MemberController.listmode.source}">
-                        <p:column headerText="Fullname">
-                            <h:outputText id="dragIcon" value="#{source.mfullname}"/>
-                            <p:draggable for="dragIcon" revert="true" />
-                        </p:column>
-                    </p:dataTable>
-                    <p:droppable tolerance="touch" onDrop="handleDrop">                        
-                    <p:dataTable var="target" value="#{MemberController.listmode.target}">
-                        <p:column headerText="Fullname">
-                            <h:outputText value="#{target.mfullname}"/>
-                        </p:column>
-                    </p:dataTable>
-                    </p:droppable>
                     
-                    <h:commandButton action="#{MemberController.SAVECLASSMEMBER(member.target)}" value="Save Members to class"/>
+                    
+                    <p:commandButton onclick="@form" action="#{MemberController.SAVECLASSMEMBER(member.target)}" value="Save Members to class"/>
                 </p:panel>
                 </h:form>
             </ui:define>

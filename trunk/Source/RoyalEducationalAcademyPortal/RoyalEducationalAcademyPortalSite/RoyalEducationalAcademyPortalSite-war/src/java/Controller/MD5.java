@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class MD5 {
     public static void MD5(){
-        
+        //MD5 funtion for encryption password
     }
     public String String2MD5(String password){
         try {     

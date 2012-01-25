@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
@@ -22,7 +22,15 @@
                             <p:menuitem value="#{AssimentController.GETSELECTEDCLASS().cname}"/>
                         </p:breadCrumb><br/>
                         <c:forEach var="ra" items="#{AssimentController.GETASSIMENTBYACCOUNT()}">
-                            #{ra.raname}
+                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SubmitAssiment.xhtml?assimentid=#{ra.raid}">
+                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
+                                    <img src="resources/images/ExpiredIcon.png"/>
+                                </c:if>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)}">
+                                    <img src="resources/images/in_progress.png"/>
+                                </c:if>
+                                 "#{ra.stuffmid.mfullname}" request you "#{ra.raname}" from "#{ra.radate}"
+                            </a>
                         </c:forEach>
                     </p:panel>
                 </h:form>
