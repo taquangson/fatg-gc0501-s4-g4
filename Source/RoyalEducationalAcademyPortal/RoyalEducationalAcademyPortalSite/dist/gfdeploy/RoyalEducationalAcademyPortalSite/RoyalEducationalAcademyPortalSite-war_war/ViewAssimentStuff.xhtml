@@ -12,8 +12,35 @@
 
             <ui:define name="content">
                 <h:form>
-                    <p:panel header="All your assiment">
-                        
+                    <p:panel header="All your assiment">                        
+                    <table>
+                        <tr style="font-weight: bold">
+                            <td>Assiment name</td>
+                            <td>Requested Class</td>
+                            <td>Course</td>
+                            <td>Request date</td>
+                            <td>Deadline</td>
+                            <td>Status</td>
+                            <td>Number of Submissions</td>
+                        </tr>
+                        <c:forEach var="ra" items="#{AssimentController.GETREQUESTASSIMENTSTUFF(MemberController.GETACCOUNT())}">
+                            
+                            <tr>
+                                <td><a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssimentStatus.xhtml?assimentid=#{ra.raid}">#{ra.raname}</a></td>
+                                <td>#{ra.cid.cname}</td>
+                                <td>#{ra.cid2.cname}</td>
+                                <td>#{ra.radate}</td>
+                                <td>#{ra.radeadline}</td>
+                                <td><c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
+                                    <img src="resources/images/ExpiredIcon.png"/>
+                                </c:if>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)}">
+                                    <img src="resources/images/in_progress.png"/>
+                                </c:if></td>
+                                <td>#{AssimentController.GETCOUNTMEMBERBYRA(ra.raid)}</td> 
+                            </tr>
+                        </c:forEach>
+                    </table>
                     </p:panel>
                 </h:form>
             </ui:define>

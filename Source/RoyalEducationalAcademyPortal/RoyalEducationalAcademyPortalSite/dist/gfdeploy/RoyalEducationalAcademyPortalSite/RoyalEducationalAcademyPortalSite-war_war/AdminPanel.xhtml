@@ -24,8 +24,8 @@
                                 #{Class.cname}
                             </p:column>
                             <p:column>
-                                <h:commandButton value="Delete"/>
-                                <h:commandButton value="Edit"/>
+                                <p:commandButton value="Delete"/>
+                                <p:commandButton value="Edit"/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SetMember2Class.xhtml?cid=#{Class.cid}">Set members for Class</a>
                             </p:column>
                         </p:dataTable>
@@ -46,13 +46,21 @@
                                 #{Member.mpermission.mpname}
                             </p:column>
                             <p:column>
-                                <p:commandButton onclick="@form" action="#{MemberController.DELETEMEMBER(Member.mid)}" value="Delete"/>
+                                <p:commandButton update="@form" action="#{MemberController.DELETEMEMBER(Member.mid)}" value="Delete"/>
                                 <p:commandButton value="Edit"/>
                             </p:column>
                         </p:dataTable>
                         <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newMember.xhtml">New Member</a>
                     </p:tab>
-                    <p:tab title="Assiment Report">
+                    <p:tab title="Members and Assiments Report">
+                        <p:fieldset legend="Class member">
+                            <p:pieChart value="#{AssimentController.GETMEMBERNUMBERBYCLASSCHART()}" legendPosition="w" title="Class member"/>
+                        </p:fieldset>
+                        <p:fieldset legend="Request Assiment for class">
+                            <p:pieChart value="#{AssimentController.GETASSIMENTNUMBERBYCLASSCHART()}" legendPosition="w" title="Request Assiment for class"/>
+                        </p:fieldset>
+                        <p:fieldset legend="Number of Assiment Submited">
+                        </p:fieldset>
                     </p:tab>
                     <p:tab title="Feedback and FAQs Manager">
                         <p:dataTable paginator="true" rows="10" value="#{FAQsController.SHOWALL()}" var="FAQ">

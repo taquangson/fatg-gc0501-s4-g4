@@ -42,15 +42,6 @@ public class MembersFacade extends AbstractFacade<Members> {
     //Code block for insert row (v2)
     public void ADD2(String username, String password, String address, String fullname, String email, byte[] avarta, Date birthday, int permission){
         Members rs = new Members();
-//        rs.setMusername(username);
-//        rs.setMpassword(password);
-//        rs.setMadress(address);
-//        rs.setMfullname(fullname);
-//        rs.setMemail(email);
-//        rs.setMavarta(avarta);
-//        rs.setMbirthdate(birthday);
-//        Memberpermission mps = em.find(Memberpermission.class, permission);
-//        rs.setMpermission(mps);
         em.persist(rs);
     }
     //Code block for insert row (v1)

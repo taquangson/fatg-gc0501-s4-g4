@@ -42,9 +42,6 @@ public class Markassiment implements Serializable {
     @JoinColumn(name = "SAID", referencedColumnName = "SAID")
     @ManyToOne
     private Submitassiment said;
-    @JoinColumn(name = "RAID", referencedColumnName = "RAID")
-    @ManyToOne
-    private Requestassiment raid;
     @JoinColumn(name = "MID", referencedColumnName = "MID")
     @ManyToOne
     private Members mid;
@@ -78,14 +75,6 @@ public class Markassiment implements Serializable {
 
     public void setSaid(Submitassiment said) {
         this.said = said;
-    }
-
-    public Requestassiment getRaid() {
-        return raid;
-    }
-
-    public void setRaid(Requestassiment raid) {
-        this.raid = raid;
     }
 
     public Members getMid() {

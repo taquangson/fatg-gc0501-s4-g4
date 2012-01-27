@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                <p:fieldset>
+                    <p:growl id="message"/>
+                    #{AssimentController.HackRAID()}
+                        <table>
+                            <tr>
+                                <td>Assiment name:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().raname}</td>
+                            </tr>
+                            <tr>
+                                <td>Course:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().cid2.cname}</td>
+                            </tr>
+                            <tr>
+                                <td>Class:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().cid.cname}</td>
+                            </tr>
+                            <tr>
+                                <td>Information:</td>
+                                <td><h:outputText escape="false" value="#{AssimentController.GETASSIMENTBYID().rainfo}"/></td>
+                            </tr>
+                            <tr>
+                                <td>Request document</td>
+                                <td><a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/assiment/#{AssimentController.GETASSIMENTBYID().cid2.cid}/#{AssimentController.GETASSIMENTBYID().rafilename}">#{AssimentController.GETASSIMENTBYID().rafilename}</a></td>
+                            </tr>
+                            <tr>
+                                <td>Dead line:</td>
+                                <td>#{AssimentController.GETASSIMENTBYID().radeadline}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(AssimentController.GETASSIMENTBYID().radeadline)!=true}">
+                                    <img src="resources/images/ExpiredIcon.png"/>
+                                </c:if>
+                                <c:if test="#{AssimentController.VALIDDEADLINE(AssimentController.GETASSIMENTBYID().radeadline)}">
+                                    <img src="resources/images/in_progress.png"/>
+                                </c:if>
+                                </td>
+                                <td>
+                                    <h:commandButton action="#{AssimentController.DELETEREQUESTASSIMENT()}" value="Delete this Assiment"/><br/>
+                                        <p:messages id="messages" showDetail="true"/> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Student Submission: #{AssimentController.GETCOUNTMEMBERBYRA(AssimentController.GETASSIMENTBYID().raid)}</td>
+                                <td>
+                                    <p:inplace label="View all Student Submission for Marking">
+                                        <p:dataTable var="members" value="#{AssimentController.CLEARSTUFF(AssimentController.GETASSIMENTBYID().cid.classmemberList)}">
+                                            <p:column headerText="Student name">#{members.mid.mfullname}</p:column>
+                                            <p:column headerText="Submission file">
+                                                <p:dataTable style="border: 0" value="#{AssimentController.GETSUBMITASSIMENTBYMEMBER(members.mid)}" var="submit">
+                                                    
+                                                    <c:if var="point" test="#{(AssimentController.GETASSIMENTMARK(submit)=='999')}">
+                                                        <p:column><a href="../assiment/#{submit.safilename}">View Submission File</a></p:column>
+                                                        <p:column><a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/MarkAssiment.xhtml?submitassimentid=#{submit.said}">Mark this Submission</a></p:column>
+                                                    </c:if>
+                                                    <c:if var="point" test="#{(AssimentController.GETASSIMENTMARK(submit))!='999'}">
+                                                        <p:column><a href="../assiment/#{submit.safilename}">View Submission File</a></p:column>
+                                                        <p:column>#{(AssimentController.GETASSIMENTMARK(submit))} point</p:column>
+                                                        <p:column><a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/MarkAssiment.xhtml?submitassimentid=#{submit.said}">Remark this Submission</a></p:column>
+                                                    </c:if>
+                                                </p:dataTable>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </p:inplace>
+                                </td>
+                            </tr>
+                        </table>
+                </p:fieldset>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

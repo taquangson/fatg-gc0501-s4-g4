@@ -13,7 +13,7 @@
 
             <ui:define name="content">
                 <p:panel header="New Assiment form">
-                    <h:form>
+                    <h:form enctype="multipart/form-data">
                         <p:messages showDetail="true" />
                         #{ShowClassController.HACKCLASSID()}
                         <h:selectOneMenu id="courseid" value="#{ShowClassController.selectedCID2}">
@@ -39,10 +39,10 @@
                             <p:inputText value="#{ShowClassController.newra.raname}"/><br/>
                             Assiment info:<br/>
                             <p:editor value="#{ShowClassController.newra.rainfo}" />
-                            Assiment file: <p:fileUpload/><br/>
+                            Assiment file: <p:fileUpload value="#{ShowClassController.file}" mode="simple"/><br/>
                             Deadline: <p:calendar value="#{ShowClassController.newra.radeadline}"/><br/><br/>
      
-                            <h:commandButton action="#{ShowClassController.NEWRA(ShowClassController.newra, MemberController.GETACCOUNT())}" value="Request assiment"/>
+                            <p:commandButton ajax="false" actionListener="#{ShowClassController.NEWRA(ShowClassController.newra, MemberController.GETACCOUNT())}" value="Request assiment"/>
                     </h:form>
                 </p:panel>
             </ui:define>

@@ -102,7 +102,11 @@ public class MemberController {
     //Get a image Stream from a byte[]
     public StreamedContent GETMEMBERAVARTA(byte[] ByteAvarta){
         DefaultStreamedContent MemberAvarta = new DefaultStreamedContent();
+        try{
         MemberAvarta = new DefaultStreamedContent(new ByteArrayInputStream(ByteAvarta), "image/jpg", "avarta.jpg");
+        }catch(Exception ex){
+            
+        }
         return MemberAvarta;
     }
     public void SAVEAVRTA(UploadedFile file){
@@ -384,6 +388,9 @@ public class MemberController {
             }
         }
     }
+    private String inPas;
+    private String newPas;
+    private String renewPas;
     // Change password for current account
     public void CHANGEPASSWORD() {
         FacesMessage msg = new FacesMessage("Succesful", " Password is change.");
@@ -640,5 +647,47 @@ public class MemberController {
      */
     public void setNewfile(UploadedFile newfile) {
         this.newfile = newfile;
+    }
+
+    /**
+     * @return the inPas
+     */
+    public String getInPas() {
+        return inPas;
+    }
+
+    /**
+     * @param inPas the inPas to set
+     */
+    public void setInPas(String inPas) {
+        this.inPas = inPas;
+    }
+
+    /**
+     * @return the newPas
+     */
+    public String getNewPas() {
+        return newPas;
+    }
+
+    /**
+     * @param newPas the newPas to set
+     */
+    public void setNewPas(String newPas) {
+        this.newPas = newPas;
+    }
+
+    /**
+     * @return the renewPas
+     */
+    public String getRenewPas() {
+        return renewPas;
+    }
+
+    /**
+     * @param renewPas the renewPas to set
+     */
+    public void setRenewPas(String renewPas) {
+        this.renewPas = renewPas;
     }
 }

@@ -12,17 +12,29 @@
             <ui:define name="content">
                 #{AssimentController.SETUPASSIMENTVIEW()}
                 <p:panel header="All Assiment">
+                    <table>
+                        <tr style="font-weight: bold">
+                            <td>Assiment name</td>
+                            <td>Stuff Request</td>
+                            <td>Request date</td>
+                            <td>Deadline</td>
+                            <td>Submissions</td>
+                        </tr>
                         <c:forEach var="ra" items="#{AssimentController.GETALLASSIMENTBYCLASS()}">
-                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SubmitAssiment.xhtml?assimentid=#{ra.raid}">
-                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
+                            <tr>
+                                <td>#{ra.raname}</td>
+                                <td>#{ra.stuffmid.mfullname}</td>
+                                <td>#{ra.radate}</td>
+                                <td>#{ra.radeadline}</td>
+                                <td><c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
                                     <img src="resources/images/ExpiredIcon.png"/>
                                 </c:if>
                                 <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)}">
-                                    <img src="resources/images/in_progress.png"/>
-                                </c:if>
-                                 "#{ra.stuffmid.mfullname}" request you "#{ra.raname}" from "#{ra.radate}"
-                            </a><br/>
+                                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SubmitAssiment.xhtml?assimentid=#{ra.raid}"><img src="resources/images/in_progress.png"/></a>
+                                </c:if></td>
+                            </tr>
                         </c:forEach>
+                    </table>
                 </p:panel>
             </ui:define>
 

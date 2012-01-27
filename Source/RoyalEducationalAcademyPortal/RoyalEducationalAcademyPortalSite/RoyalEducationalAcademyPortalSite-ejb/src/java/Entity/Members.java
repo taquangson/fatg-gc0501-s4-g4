@@ -50,6 +50,10 @@ public class Members implements Serializable {
     @Lob
     @Column(name = "MAVARTA")
     private byte[] mavarta;
+    @OneToMany(mappedBy = "mid")
+    private List<Submitassiment> submitassimentList;
+    @OneToMany(mappedBy = "mid")
+    private List<Markassiment> markassimentList;
     @OneToMany(mappedBy = "stuffmid")
     private List<Requestassiment> requestassimentList;
     private static final long serialVersionUID = 1L;
@@ -187,6 +191,24 @@ public class Members implements Serializable {
 
     public void setMavarta(byte[] mavarta) {
         this.mavarta = mavarta;
+    }
+
+    @XmlTransient
+    public List<Submitassiment> getSubmitassimentList() {
+        return submitassimentList;
+    }
+
+    public void setSubmitassimentList(List<Submitassiment> submitassimentList) {
+        this.submitassimentList = submitassimentList;
+    }
+
+    @XmlTransient
+    public List<Markassiment> getMarkassimentList() {
+        return markassimentList;
+    }
+
+    public void setMarkassimentList(List<Markassiment> markassimentList) {
+        this.markassimentList = markassimentList;
     }
     
 }

@@ -25,5 +25,14 @@ public class MarkassimentFacade extends AbstractFacade<Markassiment> {
     public MarkassimentFacade() {
         super(Markassiment.class);
     }
+    public void ADD(Markassiment newmass){
+        em.persist(newmass);
+        em.flush();
+    }
+    public void DELETE(int massid){
+        Markassiment delmass = em.find(Markassiment.class, massid);
+        em.remove(delmass);
+        em.flush();
+    }
     
 }

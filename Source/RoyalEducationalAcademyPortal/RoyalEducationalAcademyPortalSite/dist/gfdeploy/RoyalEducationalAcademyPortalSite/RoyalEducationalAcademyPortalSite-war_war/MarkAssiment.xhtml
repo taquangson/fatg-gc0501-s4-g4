@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+
+        <ui:composition template="./index.xhtml">
+
+            <ui:define name="content">
+                <p:panel>
+                    <h:form>
+                        #{AssimentController.HackMarkAssimentID()}
+                        <p:messages id="message"/>
+                    <table>
+                        <tr>
+                            <td>Assiment name</td>
+                            <td>#{AssimentController.GETSUBMITASSIMENTBYID().raid.raname}</td>
+                        </tr>
+                        <tr>
+                            <td>Course</td>
+                            <td>#{AssimentController.GETSUBMITASSIMENTBYID().raid.cid2.cname}</td>
+                        </tr>
+                        <tr>
+                            <td>Class</td>
+                            <td>#{AssimentController.GETSUBMITASSIMENTBYID().raid.cid.cname}</td>
+                        </tr>
+                        <tr>
+                            <td>Student</td>
+                            <td>#{AssimentController.GETSUBMITASSIMENTBYID().mid.mfullname}</td>
+                        </tr>
+                        <tr>
+                            <td>Submission file</td>
+                            <td><a href="../assiment/#{AssimentController.GETSUBMITASSIMENTBYID().safilename}"></a></td>
+                        </tr>
+                        <tr>
+                            <td>Mark</td>
+                            <td><p:spinner value="#{AssimentController.newmass.mamark}" min="0" max="10" stepFactor="0.1"/></td>
+                        </tr>
+                        <tr>
+                            <td>Save</td>
+                            <td><h:commandButton action="#{AssimentController.ADDNEWMARKASSIMENT(MemberController.GETACCOUNT(), AssimentController.GETSUBMITASSIMENTBYID())}" value="Mark this Submission"/></td>
+                        </tr>
+                    </table>
+                    </h:form>
+                </p:panel>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

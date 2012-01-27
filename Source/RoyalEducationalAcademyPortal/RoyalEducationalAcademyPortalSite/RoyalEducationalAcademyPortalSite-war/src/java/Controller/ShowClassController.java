@@ -28,6 +28,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -53,6 +54,7 @@ public class ShowClassController {
     private int selectedCID;
     private int selectedCID2;
     private Requestassiment newra;
+    private UploadedFile file;
 
     /** Creates a new instance of ShowClassController */
     public ShowClassController() {
@@ -141,9 +143,13 @@ public class ShowClassController {
             error++;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "Please select course"));
         }
+        if (file==null) {
+            error++;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Some input is wrong", "File is null"));
+        }
         if (error == 0) {
             newrax.setRadate(new Date());
-            newrax.setRafilename("Demo.rar");
+            newrax.setRafilename(file.getFileName());
             newrax.setCid(classFacade.find(cid));
             newrax.setCid2(courseFacade.find(cid2));
             newrax.setStuffmid(mem);
@@ -245,5 +251,19 @@ public class ShowClassController {
      */
     public void setSelectedCID2(String selectedCID2) {
         this.selectedCID2 = Integer.parseInt(selectedCID2);
+    }
+
+    /**
+     * @return the file
+     */
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 }
