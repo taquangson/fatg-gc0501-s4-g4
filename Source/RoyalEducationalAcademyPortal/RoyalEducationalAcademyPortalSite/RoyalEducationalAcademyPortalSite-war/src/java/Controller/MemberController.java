@@ -392,9 +392,26 @@ public class MemberController {
     private String newPas;
     private String renewPas;
     // Change password for current account
-    public void CHANGEPASSWORD() {
-        FacesMessage msg = new FacesMessage("Succesful", " Password is change.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+    public void CHANGEPASSWORD(Members mem, String inPas, String newPas, String renewPas, String password) {
+        if(newPas.length()<6){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fail", "New password is too short"));
+        }else{
+            if(newPas.equals(renewPas)){
+                // md5 password
+                inPas = new MD5().String2MD5(inPas);
+                if(inPas.equals(password)){
+                    newPas = new MD5().String2MD5(newPas);
+                    mem.setMpassword(newPas);
+                    member1Facade.UPDATE(mem);
+                    FacesMessage msg = new FacesMessage("Succesful", " Password is change.");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                }else{
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fail", "Old-password is wrong."+password+newPas));
+                }
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fail", "Re-type password isn't match"));
+            }
+        }
     }
     //Login and set all session for validate in case
     public void LOGIN(String username, String password) {
