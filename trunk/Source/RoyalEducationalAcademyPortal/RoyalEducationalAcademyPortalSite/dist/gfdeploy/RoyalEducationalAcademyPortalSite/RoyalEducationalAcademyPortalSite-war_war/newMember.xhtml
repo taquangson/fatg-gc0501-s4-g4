@@ -60,7 +60,8 @@
                     </p:selectOneMenu></td>
             </tr>  
             <tr>
-                <td colspan="2"><h:commandButton action="#{MemberController.ADDNEWMEMBER()}" value="Insert"/></td>            
+                <td></td>
+                <td colspan="2"><p:commandButton update="@form" action="#{MemberController.ADDNEWMEMBER()}" value="Insert"/><p:commandButton update="@form" type="reset" value="Clear"/></td>            
             </tr>
             
             </table>

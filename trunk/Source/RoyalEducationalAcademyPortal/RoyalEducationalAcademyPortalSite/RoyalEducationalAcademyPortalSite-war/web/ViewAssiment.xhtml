@@ -21,17 +21,29 @@
                             <p:menuitem value="#{AssimentController.GETSELECTEDCOURSE().cname}"/>
                             <p:menuitem value="#{AssimentController.GETSELECTEDCLASS().cname}"/>
                         </p:breadCrumb><br/>
-                        <c:forEach var="ra" items="#{AssimentController.GETASSIMENTBYACCOUNT()}">
-                            <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SubmitAssiment.xhtml?assimentid=#{ra.raid}">
-                                <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
+                        <table>
+                        <tr style="font-weight: bold">
+                            <td>Assiment name</td>
+                            <td>Stuff Request</td>
+                            <td>Request date</td>
+                            <td>Deadline</td>
+                            <td>Submissions</td>
+                        </tr>
+                        <c:forEach var="ra" items="#{AssimentController.GETALLASSIMENTBYCOURSE()}">
+                            <tr>
+                                <td>#{ra.raname}</td>
+                                <td>#{ra.stuffmid.mfullname}</td>
+                                <td>#{ra.radate}</td>
+                                <td>#{ra.radeadline}</td>
+                                <td><c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)!=true}">
                                     <img src="resources/images/ExpiredIcon.png"/>
                                 </c:if>
                                 <c:if test="#{AssimentController.VALIDDEADLINE(ra.radeadline)}">
-                                    <img src="resources/images/in_progress.png"/>
-                                </c:if>
-                                 "#{ra.stuffmid.mfullname}" request you "#{ra.raname}" from "#{ra.radate}"
-                            </a>
+                                    <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/SubmitAssiment.xhtml?assimentid=#{ra.raid}"><img src="resources/images/in_progress.png"/></a>
+                                </c:if></td>
+                            </tr>
                         </c:forEach>
+                    </table>
                     </p:panel>
                 </h:form>
             </ui:define>

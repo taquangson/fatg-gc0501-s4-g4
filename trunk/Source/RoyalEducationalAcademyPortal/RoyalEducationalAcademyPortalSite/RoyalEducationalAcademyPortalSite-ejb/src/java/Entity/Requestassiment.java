@@ -6,6 +6,7 @@ package Entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,11 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,6 +40,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Requestassiment.findByRadate", query = "SELECT r FROM Requestassiment r WHERE r.radate = :radate"),
     @NamedQuery(name = "Requestassiment.findByRadeadline", query = "SELECT r FROM Requestassiment r WHERE r.radeadline = :radeadline")})
 public class Requestassiment implements Serializable {
+    @Column(name = "RADATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date radate;
+    @Column(name = "RADEADLINE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date radeadline;
+    @OneToMany(mappedBy = "raid")
+    private List<Submitassiment> submitassimentList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -51,12 +62,6 @@ public class Requestassiment implements Serializable {
     @Size(max = 80)
     @Column(name = "RAFILENAME")
     private String rafilename;
-    @Column(name = "RADATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date radate;
-    @Column(name = "RADEADLINE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date radeadline;
     @JoinColumn(name = "STUFFMID", referencedColumnName = "MID")
     @ManyToOne
     private Members stuffmid;
@@ -106,22 +111,6 @@ public class Requestassiment implements Serializable {
         this.rafilename = rafilename;
     }
 
-    public Date getRadate() {
-        return radate;
-    }
-
-    public void setRadate(Date radate) {
-        this.radate = radate;
-    }
-
-    public Date getRadeadline() {
-        return radeadline;
-    }
-
-    public void setRadeadline(Date radeadline) {
-        this.radeadline = radeadline;
-    }
-
     public Members getStuffmid() {
         return stuffmid;
     }
@@ -169,6 +158,31 @@ public class Requestassiment implements Serializable {
     @Override
     public String toString() {
         return "Entity.Requestassiment[ raid=" + raid + " ]";
+    }
+
+    public Date getRadate() {
+        return radate;
+    }
+
+    public void setRadate(Date radate) {
+        this.radate = radate;
+    }
+
+    public Date getRadeadline() {
+        return radeadline;
+    }
+
+    public void setRadeadline(Date radeadline) {
+        this.radeadline = radeadline;
+    }
+
+    @XmlTransient
+    public List<Submitassiment> getSubmitassimentList() {
+        return submitassimentList;
+    }
+
+    public void setSubmitassimentList(List<Submitassiment> submitassimentList) {
+        this.submitassimentList = submitassimentList;
     }
     
 }

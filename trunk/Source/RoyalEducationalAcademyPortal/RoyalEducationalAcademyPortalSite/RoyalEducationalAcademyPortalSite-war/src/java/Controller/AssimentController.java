@@ -4,13 +4,17 @@
  */
 package Controller;
 
+import Entity.Classmember;
 import Entity.Course;
+import Entity.Markassiment;
+import Entity.Memberpermission;
 import Entity.Members;
 import Entity.Requestassiment;
 import Entity.Submitassiment;
 import Session.ClassFacade;
 import Session.ClassmemberFacade;
 import Session.CourseFacade;
+import Session.MarkassimentFacade;
 import Session.MembersFacade;
 import Session.RequestassimentFacade;
 import Session.SubmitassimentFacade;
@@ -21,6 +25,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -35,6 +41,7 @@ import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 import org.primefaces.model.UploadedFile;
+import org.primefaces.model.chart.PieChartModel;
 
 /**
  *
@@ -45,6 +52,8 @@ import org.primefaces.model.UploadedFile;
 public class AssimentController {
     //Insert some EJB for using
     
+    @EJB
+    private MarkassimentFacade markassimentFacade;
     @EJB
     private MembersFacade membersFacade;
     @EJB
@@ -61,12 +70,175 @@ public class AssimentController {
     private ScheduleModel eventModel; 
     int selectedCourse;
     int seletedClass;
-
+    private int temp;
+    private Markassiment newmass;
     /** Creates a new instance of AssimentController */
     public AssimentController() {
         selectedCourse = 0;
         seletedClass = 0;
         currentra = new Requestassiment(1);
+        temp = 0;
+        newmass = new Markassiment();
+    }
+    //Get Assiment Mark for Student
+    public List<Markassiment> GETASSIMENTMARKLIST(Members mem){
+        List<Markassiment> lma = new ArrayList<Markassiment>();
+        List<Markassiment> lm = new ArrayList<Markassiment>();
+        lma = markassimentFacade.findAll();
+        for(int i = 0; i < lma.size(); i++){
+            if(lma.get(i).getSaid().getMid().equals(mem)){
+                lm.add(lma.get(i));
+            }
+        }
+        return lm;
+    }
+    //Get Assiment Mark
+    public double GETASSIMENTMARK(Submitassiment sas){
+        double mark = 999;
+        List<Markassiment> lma = new ArrayList<Markassiment>();
+        lma = markassimentFacade.findAll();
+        for(int i = 0; i < lma.size(); i++){
+            if(lma.get(i).getSaid().equals(sas)){
+                mark = lma.get(i).getMamark();
+            }
+        }
+        return mark;
+    }
+    //Hack AssimentID to Session, for fix some bug
+    public void HackMarkAssimentID(){
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        try{
+            int sasid = Integer.parseInt(request.getParameter("submitassimentid"));
+            session.setAttribute("submitassimentid", sasid);
+        }catch(Exception ex){
+            
+        }
+    }
+    //Get current submission assiment by URL
+    public Submitassiment GETSUBMITASSIMENTBYID(){
+        Submitassiment sas = new Submitassiment();
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        try{
+            int sasid = Integer.parseInt(request.getParameter("submitassimentid"));
+            sas = submitassimentFacade.find(sasid);
+        }catch(Exception ex){
+            int sasid = Integer.parseInt(session.getAttribute("submitassimentid").toString());
+            sas = submitassimentFacade.find(sasid);
+        }
+        return sas;
+    }
+    //Creating new MarkAssiment
+    public void ADDNEWMARKASSIMENT(Members mem, Submitassiment sas){
+        newmass.setSaid(sas);
+        newmass.setMid(mem);
+        try{
+            
+            List<Markassiment> lma = new ArrayList<Markassiment>();
+            lma = markassimentFacade.findAll();
+            for(int i = 0; i < lma.size(); i++){
+                if(lma.get(i).getSaid().equals(sas)){
+                    markassimentFacade.DELETE(lma.get(i).getMaid());
+                }
+            }
+            markassimentFacade.ADD(newmass);
+            HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.sendRedirect("http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces//ViewAssimentStatus.xhtml?assimentid="+sas.getSaid());
+        }catch(Exception ex){
+        }
+    }
+    //Delete request assiment by id
+    public void DELETEREQUESTASSIMENT(){
+        int raid;
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        HttpSession session = request.getSession(true);
+        raid = Integer.parseInt(session.getAttribute("assimentid").toString());
+        
+        try {
+            requestassimentFacade.REMOVE(raid);
+        } catch (Exception ex) {
+            Logger.getLogger(AssimentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+            response.sendRedirect("http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssimentStuff.xhtml");
+        } catch (Exception ex) {
+            Logger.getLogger(AssimentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    //Clear all Stuff and Admin from a ClassmembersList
+    public List<Classmember> CLEARSTUFF(List<Classmember> lmem){
+        List<Classmember> newlmem = new ArrayList<Classmember>();
+        if(lmem!=null){
+        for(int i = 0; i < lmem.size(); i++){
+            if(lmem.get(i).getMid().getMpermission().equals(new Memberpermission(3))){
+                newlmem.add(lmem.get(i));
+            }
+        }
+        }
+        return newlmem;
+    }
+    //Get SubmiAssiment by Memberid
+    public List<Submitassiment> GETSUBMITASSIMENTBYMEMBER(Members mem){
+        List<Submitassiment> lsat = new ArrayList<Submitassiment>();
+        List<Submitassiment> lsa = new ArrayList<Submitassiment>();
+        lsa = submitassimentFacade.findAll();
+        for(int i = 0; i < lsa.size(); i++){
+            if(lsa.get(i).getMid().equals(mem)){
+                lsat.add(lsa.get(i));
+            }
+        }
+        return lsat;
+    }
+    //Count Number of Submission by RequestAssimentID
+    public int GETCOUNTMEMBERBYRA(int raid){
+        int count = 0;
+        Requestassiment cra = new Requestassiment();
+        cra = requestassimentFacade.find(raid);
+        List<Submitassiment> sas = new ArrayList<Submitassiment>();
+        sas = submitassimentFacade.findAll();
+        for(int i = 0; i < sas.size(); i++){
+            if(sas.get(i).getRaid().equals(cra)){
+                count++;
+            }
+        }
+        return count;
+    }
+    //Get all Assiment for Stuff
+    public List<Requestassiment> GETREQUESTASSIMENTSTUFF(Members stuff){
+        List<Requestassiment> rs = new ArrayList<Requestassiment>();
+        List<Requestassiment> ras = new ArrayList<Requestassiment>();
+        rs = requestassimentFacade.findAll();
+        for(int i = 0; i < rs.size(); i++){
+            if(rs.get(i).getStuffmid().equals(stuff)){
+                ras.add(rs.get(i));
+            }
+        }
+        return ras;
+    }
+    //Get assiment PieChart for Report
+    public PieChartModel GETMEMBERNUMBERBYCLASSCHART(){
+        PieChartModel pieAss;
+        pieAss = new PieChartModel();
+        List<Entity.Class> classlist = classFacade.findAll();
+        for(int i = 0; i < classlist.size(); i++){
+            pieAss.set(classlist.get(i).getCname(), classlist.get(i).getClassmemberList().size());
+        }
+        return pieAss;
+    }
+    //Get assiment PieChart for Report
+    public PieChartModel GETASSIMENTNUMBERBYCLASSCHART(){
+        PieChartModel pieAss;
+        pieAss = new PieChartModel();
+        List<Entity.Class> classlist = classFacade.findAll();
+        for(int i = 0; i < classlist.size(); i++){
+            pieAss.set(classlist.get(i).getCname(), classlist.get(i).getRequestassimentList().size());
+        }
+        return pieAss;
     }
     //Get assiment to schedule for homepage
     public void SETUPSCHEDULE(){
@@ -79,47 +251,6 @@ public class AssimentController {
     private String filePath;
     //demo fileupload from http://java.dzone.com/articles/how-upload-primefaces-under
     private static final int BUFFER_SIZE = 6124;
-    private String folderToUpload;
-    //Save a file from file upload
-
-    public void AssimentFileUpload(UploadedFile file) {
-
-//        FacesMessage msg = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");  
-//        FacesContext.getCurrentInstance().addMessage(null, msg);
-
-        String uploadedFolder = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("uploadFolder");
-
-        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
-        File result = new File(extContext.getRealPath("//" + uploadedFolder) + "//" + file.getFileName());
-        System.out.println(result.getAbsolutePath());
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(result);
-
-            byte[] buffer = new byte[(int) file.getSize()];
-
-            int bulk;
-            InputStream inputStream = file.getInputstream();
-            while (true) {
-                bulk = inputStream.read(buffer);
-                if (bulk < 0) {
-                    break;
-                }
-                fileOutputStream.write(buffer, 0, bulk);
-                fileOutputStream.flush();
-            }
-
-            fileOutputStream.close();
-            inputStream.close();
-
-            setFilePath(result + "/" + file.getFileName());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Complete upload", filePath));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "The files were not uploaded!", filePath));
-        }
-    }
     //Get all information of current account: Copy from MemberController :D
     public Members GETACCOUNT() {
         Members account = new Members();
@@ -149,9 +280,13 @@ public class AssimentController {
         }
         
         submitassimentFacade.ADD(newsass);
-        
+        UploadFile(event.getFile(),"//assiment//");
         FacesMessage msg = new FacesMessage("Succesful", filename + " is uploaded from " + GETACCOUNT().getMfullname() + " for " + newsass.getRaid().getRaname());  
         FacesContext.getCurrentInstance().addMessage(null, msg);  
+    }
+    //Upload file to a destination folder
+    public void UploadFile(UploadedFile uFile, String filepath){
+        
     }
     public void HackRAID(){
         Requestassiment ra = new Requestassiment();
@@ -161,6 +296,10 @@ public class AssimentController {
             HttpSession session = request.getSession(true);
             session.setAttribute("assimentid", Integer.parseInt(request.getParameter("assimentid")));
         } catch (Exception ex) {
+            try {
+                response.sendRedirect("http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAssimentStuff.xhtml");
+            } catch (Exception e) {
+            }
         }
     }
     //Get current assiment from id in URL
@@ -204,7 +343,6 @@ public class AssimentController {
         return rs;
     }
     //Get all assiment for selected class from URL
-
     public List<Requestassiment> GETALLASSIMENTBYCLASS() {
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
@@ -217,6 +355,27 @@ public class AssimentController {
             classes = classFacade.find(seletedClass);
             for (int i = 0; i < rsx.size(); i++) {
                 if (rsx.get(i).getCid().equals(classes)) {
+                    rs.add(rsx.get(i));
+                }
+            }
+        } catch (Exception ex) {
+            rs = rsx;
+        }
+        return rs;
+    }
+    //Get all assiment for selected course from URL
+    public List<Requestassiment> GETALLASSIMENTBYCOURSE() {
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        Entity.Course course = new Entity.Course();
+
+        List<Requestassiment> rsx = requestassimentFacade.findAll();
+        List<Requestassiment> rs = new ArrayList<Requestassiment>();
+        try {
+            selectedCourse = Integer.parseInt(request.getParameter("courseid"));
+            course = courseFacade.find(selectedCourse);
+            for (int i = 0; i < rsx.size(); i++) {
+                if (rsx.get(i).getCid2().equals(course)) {
                     rs.add(rsx.get(i));
                 }
             }
@@ -266,20 +425,6 @@ public class AssimentController {
     }
 
     /**
-     * @return the folderToUpload
-     */
-    public String getFolderToUpload() {
-        return folderToUpload;
-    }
-
-    /**
-     * @param folderToUpload the folderToUpload to set
-     */
-    public void setFolderToUpload(String folderToUpload) {
-        this.folderToUpload = folderToUpload;
-    }
-
-    /**
      * @return the file
      */
     public UploadedFile getFile() {
@@ -305,5 +450,33 @@ public class AssimentController {
      */
     public void setEventModel(ScheduleModel eventModel) {
         this.eventModel = eventModel;
+    }
+
+    /**
+     * @return the temp
+     */
+    public int getTemp() {
+        return temp;
+    }
+
+    /**
+     * @param temp the temp to set
+     */
+    public void setTemp(int temp) {
+        this.temp = temp;
+    }
+
+    /**
+     * @return the newmass
+     */
+    public Markassiment getNewmass() {
+        return newmass;
+    }
+
+    /**
+     * @param newmass the newmass to set
+     */
+    public void setNewmass(Markassiment newmass) {
+        this.newmass = newmass;
     }
 }

@@ -23,7 +23,12 @@
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/"><img style="float: left" src="resources/images/Home.png"/>&emsp;Home</a>
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAllAssiment.xhtml"><img style="float: left" src="resources/images/Assiment.png"/>&emsp;Assiment</a>
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/MemberPanel.xhtml"><img style="float: left" src="resources/images/eLearning.png"/>&emsp;eLearning</a>
-                    <a href=""><img style="float: left" src="resources/images/Feedback.png"/>&emsp;Feedback</a>
+                    <c:if test="#{MemberController.GETACCOUNT()!=null}">
+                        <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFeedback.xhtml"><img style="float: left" src="resources/images/Feedback.png"/>&emsp;Feedback</a>
+                    </c:if>
+                    <c:if test="#{MemberController.GETACCOUNT()==null}">
+                        <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFeedbackEmail.xhtml"><img style="float: left" src="resources/images/Feedback.png"/>&emsp;Feedback</a>
+                    </c:if>
                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/FAQs.xhtml"><img style="float: left" src="resources/images/FAQs.png"/>&emsp;FAQs</a>
                 </div>
                 <img src="resources/images/But2Right.png" style="float: right"/>
@@ -47,7 +52,7 @@
                                 <td></td>
                                 <td>
                                     <p:commandButton onclick="@form" value="Login" action="#{MemberController.LOGIN(MemberController.username, MemberController.password)}"/>
-                                    <p:commandButton type="reset">Clear</p:commandButton>
+                                    <p:commandButton value="Clear" type="reset"/>
                                 </td>
                             </tr>
                             </table>
@@ -63,7 +68,6 @@
                             <p:panel header="Administrator">
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/AdminPanel.xhtml">Admin Control Panel</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newMember.xhtml">New Member</a><br/>
-                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ReportAssiment.xhtml">Assiment Report</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/newFAQs.xhtml">New FAQ</a><br/>
                                 <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewFeedback.xhtml">View Feedback</a><br/>
                             </p:panel>
@@ -83,7 +87,7 @@
                                 <c:forEach var="classes" items="#{ClassMemberController.SHOWCLASSBYACCOUNT(MemberController.GETACCOUNT())}">
                                     <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewAllAssiment.xhtml?classid=#{classes.cid}">View All #{classes.cname} Assiment</a><br/>
                                 </c:forEach>
-                                
+                                <a href="http://localhost:8080/RoyalEducationalAcademyPortalSite-war/faces/ViewMark.xhtml">View your Marks</a><br/>
                             </p:panel>
                         </c:if>
                         </c:if>
@@ -121,7 +125,7 @@
         </div>
         </div>
         <center><img src="resources/images/Spearator.png"/></center>
-        <div style="margin: auto; width: 800px; padding-left: 100px; padding-right: 100px; height: 241px; background: url('resources/images/back2bottom.png') bottom no-repeat">
+        <div style="clear: both; margin: auto; width: 800px; padding-left: 100px; padding-right: 100px; height: 241px; background: url('resources/images/back2bottom.png') bottom no-repeat">
             <img src="resources/images/HungPM.png"/>
             <img src="resources/images/ThaoLTT.png"/>
             <img src="resources/images/VietPD.png"/>

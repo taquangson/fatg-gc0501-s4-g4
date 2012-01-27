@@ -33,8 +33,10 @@ public class RequestassimentFacade extends AbstractFacade<Requestassiment> {
             ex.printStackTrace();
         }
     }
-    public void REMOVE(Requestassiment dmb){
-        em.remove(dmb);
+    public void REMOVE(int raid){
+        Requestassiment ras = em.find(Requestassiment.class, raid);
+        em.remove(ras);
+        em.flush();
     }
     
 }

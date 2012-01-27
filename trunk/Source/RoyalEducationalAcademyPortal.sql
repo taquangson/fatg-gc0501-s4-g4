@@ -175,8 +175,7 @@ CREATE TABLE MARKASSIMENT(
 MAID int identity primary key,
 MAMARK float,
 MID int references MEMBERS(MID),
-SAID int references SUBMITASSIMENT(SAID),
-RAID int references REQUESTASSIMENT(RAID)
+SAID int references SUBMITASSIMENT(SAID)
 )
 --Creating Feedback and FAQs table
 GO
